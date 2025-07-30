@@ -41,7 +41,7 @@ const Home = ({ navigation }) => {
       {!imageLoaded && (
         <ActivityIndicator 
           size="large" 
-          color="#27b099" 
+          color="#4B3E2F" 
           style={{ position: 'absolute', bottom: hp('20%') }}
         />
       )}
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
       justifyContent: "center", 
       flexDirection: "row",
       borderRadius: 50, 
-      backgroundColor: "#27b099",
+      backgroundColor: "#4B3E2F",
       padding: 10,
       shadowColor: "#000", 
       shadowOffset: { width: 0, height: 5 }, 

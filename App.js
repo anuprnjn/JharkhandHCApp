@@ -37,7 +37,7 @@ function CustomHeader({ navigation }) {
 function CustomDrawerContent(props) {
   
   const getIcon = (routeName, isActive) => {
-    const color = isActive ? 'white' : '#27b099';
+    const color = isActive ? 'white' : '#4B3E2F';
     switch (routeName) {
       case 'Services':
         return <FontAwesome name="bars" size={20} color={color} />;
@@ -101,7 +101,7 @@ function CustomDrawerContent(props) {
         </View>
 
         {/* Exit Button */}
-        {/* #27b099 */}
+        {/* #4B3E2F */}
         <Text style={styles.appversion}>App Version {appVersion}</Text>
       </View>
     </ImageBackground>
@@ -116,7 +116,7 @@ function DrawerNavigator() {
       screenOptions={({ route, navigation }) => ({
         header: () => (route.name !== 'Home' ? <CustomHeader navigation={navigation} /> : null),
         drawerActiveTintColor: '#fff',
-        drawerActiveBackgroundColor: '#27b099',
+        drawerActiveBackgroundColor: '#4B3E2F',
         drawerInactiveTintColor: '#000',
         drawerStyle: {
           width: 300,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   drawerItemActive: {
-    backgroundColor: '#27b099',
+    backgroundColor: '#4B3E2F',
   },
   itemContent: {
     flexDirection: 'row',

@@ -41,7 +41,7 @@ const ServiceCard = ({ service, onPress, toggleFavorite, isFavorite }) => {
                             <MaterialCommunityIcons
                                 name={isFavorite ? "heart" : "heart-outline"}
                                 size={20}
-                                color={isFavorite ? "#27b099" : "#8E8E93"}
+                                color={isFavorite ? "#4B3E2F" : "#8E8E93"}
                             />
                         </TouchableOpacity>
                     </View>

@@ -220,11 +220,11 @@ const styles = StyleSheet.create({
         marginBottom: 32,
     },
     clearSearchButton: {
-        backgroundColor: '#27b099',
+        backgroundColor: '#4B3E2F',
         paddingHorizontal: 24,
         paddingVertical: 12,
         borderRadius: 12,
-        shadowColor: '#27b099',
+        shadowColor: '#4B3E2F',
         shadowOffset: {
             width: 0,
             height: 4,
