@@ -1,27 +1,47 @@
 {
   "expo": {
-    "name": "test_jhc_app",
-    "slug": "test_jhc_app",
+    "name": "High Court of Jharkhand",
+    "slug": "high-court-of-jharkhand", 
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appicon/ios-dark.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/bg_mask1.png",
-      "resizeMode": "contain",
+      "resizeMode": "contain", 
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+      "supportsTablet": true,
+      "icon": {
+        "light": "./assets/appicon/ios-light.png",
+        "dark": "./assets/appicon/ios-dark.png", 
+        "tinted": "./assets/appicon/ios-tinted.png"
       }
     },
+    "android": {
+      "icon": "./assets/appicon/android-icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/appicon/android-icon.png",
+        "monochromeImage": "./assets/appicon/android-icon.png", 
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.tushar2509.highcourtofjharkhand"
+    },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/appicon/ios-dark.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d5e9d7bb-f8f7-42a2-a417-d1b03dbe0f94"
+      }
+    },
+    "owner": "tushar2509",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d5e9d7bb-f8f7-42a2-a417-d1b03dbe0f94"
     }
   }
 }

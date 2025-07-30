@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity, Alert, StatusBar, ActivityIndicator } from "react-native";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, View, StatusBar, ActivityIndicator } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import nic from '../assets/images/NIC.png';
 import logo from '../assets/images/HC_log.png';
-import bg from '../assets/images/bg_mask.jpg';
+import bg from '../assets/images/bg_mask1.png';
 
 const Home = ({ navigation }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (imageLoaded) {
+      const timer = setTimeout(() => {
+        navigation.replace('DrawerNavigator', { screen: 'Services' });
+      }, 1000);
 
-  const handlePress = () => {
-    setLoading(true);
-    setTimeout(() => {
-      navigation.navigate('DrawerNavigator', { screen: 'Services' });
-      setLoading(false);
-    }, 2000);
-  };
+      return () => clearTimeout(timer);
+    }
+  }, [imageLoaded, navigation]);
 
   return (
     <View style={styles.container}>
@@ -25,35 +25,26 @@ const Home = ({ navigation }) => {
         backgroundColor="transparent"
         translucent={true}
       />
+
       <Image 
         source={bg} 
         resizeMode='contain' 
         style={styles.backgroundImage}
+        onLoadEnd={() => setImageLoaded(true)}
       />
+
       <Image 
         source={logo} 
         style={styles.logo}
       />
-      
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={handlePress}
-        disabled={loading} 
-      >
-        {loading ? (
-          <ActivityIndicator size="small" color="white" /> 
-        ) : (
-          <>
-            <Text style={styles.buttonText}>Continue</Text>
-            <MaterialCommunityIcons 
-              name="arrow-right-circle" 
-              size={24} 
-              color="white" 
-              style={styles.buttonIcon}
-            />
-          </>
-        )}
-      </TouchableOpacity>
+
+      {!imageLoaded && (
+        <ActivityIndicator 
+          size="large" 
+          color="#27b099" 
+          style={{ position: 'absolute', bottom: hp('20%') }}
+        />
+      )}
 
       <Image source={nic} style={styles.nicLogo} />
       <Text style={styles.footerText}>Designed & developed by NIC Jharkhand.</Text>
@@ -93,7 +84,7 @@ const styles = StyleSheet.create({
       justifyContent: "center", 
       flexDirection: "row",
       borderRadius: 50, 
-      backgroundColor: "#929359",
+      backgroundColor: "#27b099",
       padding: 10,
       shadowColor: "#000", 
       shadowOffset: { width: 0, height: 5 }, 

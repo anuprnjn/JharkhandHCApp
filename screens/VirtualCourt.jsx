@@ -12,7 +12,7 @@ const VirtualCourt = () => {
       {loading && (
         <ActivityIndicator 
           size="large" 
-          color="#929359" 
+          color="#27b099" 
           style={styles.loader} 
         />
       )}

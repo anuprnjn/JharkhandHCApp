@@ -17,6 +17,8 @@ import Escr from './screens/Escr';
 import Njdg from './screens/Njdg';
 import CaseNumber from './screens/CaseStatus/CaseNumber';
 import CaseStatus from './screens/CaseStatus/CaseStatus';
+import Toast from 'react-native-toast-message';
+import Constants from 'expo-constants';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -33,14 +35,12 @@ function CustomHeader({ navigation }) {
 }
 
 function CustomDrawerContent(props) {
-  const exitApp = () => {
-    BackHandler.exitApp();
-  };
+  
   const getIcon = (routeName, isActive) => {
-    const color = isActive ? 'white' : '#929359';
+    const color = isActive ? 'white' : '#27b099';
     switch (routeName) {
       case 'Services':
-        return <FontAwesome name="cogs" size={20} color={color} />;
+        return <FontAwesome name="bars" size={20} color={color} />;
       case 'E-Pay':
         return <FontAwesome name="credit-card" size={20} color={color} />;
       case 'Online E-Court Fee':
@@ -57,6 +57,7 @@ function CustomDrawerContent(props) {
         return <Ionicons name="chevron-forward-circle-outline" size={20} color={color} />;
     }
   };
+  const appVersion = Constants.expoConfig?.version || '1.0.0';
 
   return (
     <ImageBackground source={require('./assets/images/side_gradient.jpg')} style={styles.drawerBackground}>
@@ -100,10 +101,8 @@ function CustomDrawerContent(props) {
         </View>
 
         {/* Exit Button */}
-        <TouchableOpacity onPress={exitApp} style={styles.exitButton}>
-          <Ionicons name="exit-outline" size={20} color="red" style={styles.exitIcon} />
-          <Text style={styles.exitButtonText}>Exit Jharkhand high court</Text>
-        </TouchableOpacity>
+        {/* #27b099 */}
+        <Text style={styles.appversion}>App Version {appVersion}</Text>
       </View>
     </ImageBackground>
   );
@@ -117,7 +116,7 @@ function DrawerNavigator() {
       screenOptions={({ route, navigation }) => ({
         header: () => (route.name !== 'Home' ? <CustomHeader navigation={navigation} /> : null),
         drawerActiveTintColor: '#fff',
-        drawerActiveBackgroundColor: '#929359',
+        drawerActiveBackgroundColor: '#27b099',
         drawerInactiveTintColor: '#000',
         drawerStyle: {
           width: 300,
@@ -144,16 +143,19 @@ function MainStack() {
       <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="CaseStatus" component={CaseStatus} options={{ headerShown: false }} />
-      <Stack.Screen name="Case Number" component={CaseNumber} options={{ headerShown: false }} />
+      <Stack.Screen name="CaseNumber" component={CaseNumber} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
 
 export default function App() {
   return (
+    <>
     <NavigationContainer>
       <MainStack />
     </NavigationContainer>
+    <Toast />
+    </>
   );
 }
 
@@ -192,20 +194,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 8,
     marginBottom: 10,
   },
   drawerItemActive: {
-    backgroundColor: '#929359',
+    backgroundColor: '#27b099',
   },
   itemContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   drawerItemText: {
-    fontSize: 16,
+    fontSize: 18,
     marginLeft: 10,
     color: '#333',
   },
@@ -222,6 +224,12 @@ const styles = StyleSheet.create({
     marginLeft: wp('3.5%'),
     marginRight: wp('3.5%'),
     borderRadius: 5,
+  },
+  appversion: {
+    paddingVertical: 1,
+    paddingHorizontal: 20,
+    marginBottom: hp('3%'),
+    textAlign: 'start', // Centers the text
   },
   exitIcon: {
     marginRight: 10,
