@@ -34,7 +34,7 @@ const OrdersSection = ({ interimOrders = {}, finalOrders = {}, formatDate, decod
                     onPress={() => handleViewOrder(order, 'interim')}
                     activeOpacity={0.7}
                   >
-                    <Ionicons name="eye-outline" size={16} color="#ffffffff" />
+                    <Ionicons name="eye-outline" size={16} color="#2a8a4a" />
                     <Text style={styles.viewButtonText}>View</Text>
                   </TouchableOpacity>
                 </View>
@@ -72,8 +72,8 @@ const OrdersSection = ({ interimOrders = {}, finalOrders = {}, formatDate, decod
                     onPress={() => handleViewOrder(order, 'final')}
                     activeOpacity={0.7}
                   >
-                    <Ionicons name="eye-outline" size={16} color="#ffffffff" />
-                    <Text style={[styles.viewButtonText, { color: '#ffffffff' }]}>View</Text>
+                    <Ionicons name="eye-outline" size={16} color="#2a8a4a" />
+                    <Text style={[styles.viewButtonText, { color: '#2a8a4a' }]}>View</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -158,9 +158,9 @@ const styles = StyleSheet.create({
   viewButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#00a671ff',
-    paddingHorizontal: wp('2.8%'),
-    paddingVertical: hp('0.8%'),
+    backgroundColor: '#e8f5e8',
+    paddingHorizontal: wp('2.5%'),
+    paddingVertical: hp('0.5%'),
     borderRadius: 6,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -169,9 +169,9 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   viewButtonText: {
-    color: '#ffffffff',
-    fontSize: wp('4%'),
+    color: '#2a8a4a',
     fontWeight: '600',
+    fontSize: wp('4%'),
     marginLeft: wp('1%'),
   },
   orderDetails: {

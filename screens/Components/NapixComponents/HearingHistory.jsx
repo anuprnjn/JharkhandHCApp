@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   shadowOpacity: 0.08,
   shadowRadius: 8, elevation: 2 },
   sectionTitle: { fontSize: wp('5%'), fontWeight: 'bold', color: '#000000ff', marginBottom: hp('2%'), borderBottomWidth: 1, borderBottomColor: '#ecf0f1', paddingBottom: hp('1%'), },
-  hearingItem: { backgroundColor: '#f8f9fa', padding: wp('4%'), borderRadius: 8, marginBottom: hp('1%'), borderLeftWidth: 3, borderLeftColor: '#2a8a4a', },
+  hearingItem: { backgroundColor: '#f8f9fa', padding: wp('4%'), borderRadius: 8, marginBottom: hp('1%'), borderLeftWidth: 3, borderLeftColor: '#4b9ed5ff', },
   hearingHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: hp('0.5%'), },
   hearingDate: { fontSize: wp('3.6%'), fontWeight: 'bold', color: '#2c3e50', },
   hearingPurpose: { fontSize: wp('3.5%'), color: '#2980b9', backgroundColor: '#e3f2fd', paddingHorizontal: wp('2%'), paddingVertical: hp('0.3%'), borderRadius: 10, },

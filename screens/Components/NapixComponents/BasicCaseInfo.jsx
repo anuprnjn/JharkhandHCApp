@@ -5,7 +5,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 const BasicCaseInfo = ({ caseInfo = {}, cnrData = {}, formatDate }) => {
   let status = 'N/A', statusColor = '#f39c12';
   if (cnrData?.pend_disp === 'D') {
-    status = 'Disposed'; statusColor = '#e74c3c';
+    status = 'Disposed'; statusColor = '#ff1900ff';
   } else if (cnrData?.pend_disp === 'P') {
     status = 'Pending'; statusColor = '#f39c12';
   }
@@ -18,7 +18,7 @@ const BasicCaseInfo = ({ caseInfo = {}, cnrData = {}, formatDate }) => {
       <View style={styles.infoRow}><Text style={styles.infoLabel}>Filing Date:</Text><Text style={styles.infoValue}>{formatDate(cnrData?.date_of_filing)}</Text></View>
       <View style={styles.infoRow}>
         <Text style={styles.infoLabel}>Status:</Text>
-        <Text style={[styles.infoValue, { color: statusColor, fontWeight: 'bold' }]}>{status}</Text>
+        <Text style={[styles.infoValue, { color: statusColor, fontWeight: 'bold', textTransform: "uppercase" }]}>{status}</Text>
       </View>
       {cnrData?.pend_disp === 'D' && (
         <>
