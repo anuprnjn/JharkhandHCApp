@@ -4,7 +4,7 @@
     "slug": "high-court-of-jharkhand", 
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/appicon/ios-dark.png",
+    "icon": "./assets/appicon/ios-light.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/bg_mask1.png",

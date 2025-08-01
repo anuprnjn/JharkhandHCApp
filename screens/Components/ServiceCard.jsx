@@ -1,11 +1,40 @@
 // components/ServiceCard.js
 import React from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from 'expo-linear-gradient';
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 const ServiceCard = ({ service, onPress, toggleFavorite, isFavorite }) => {
+    // Function to extract hex color and convert to rgba
+    const hexToRgba = (hex, opacity) => {
+        // Remove # if present
+        hex = hex.replace('#', '');
+        
+        // Handle 3-digit hex
+        if (hex.length === 3) {
+            hex = hex.split('').map(char => char + char).join('');
+        }
+        
+        // Handle 8-digit hex (with alpha)
+        if (hex.length === 8) {
+            hex = hex.substring(0, 6);
+        }
+        
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    };
+
+    // Create gradient colors with proper opacity
+    const gradientColors = [
+        hexToRgba(service.gradient[0], 0.12),
+        hexToRgba(service.gradient[1], 0.06),
+        'rgba(255, 255, 255, 0.95)'
+    ];
+
     return (
         <View style={styles.cardWrapper}>
             <TouchableOpacity 
@@ -13,7 +42,13 @@ const ServiceCard = ({ service, onPress, toggleFavorite, isFavorite }) => {
                 onPress={onPress} 
                 style={styles.serviceCard}
             >
-                {/* Background gradient overlay */}
+                {/* Card Background Gradient - Platform Independent */}
+                <LinearGradient
+                    colors={gradientColors}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.gradientOverlay}
+                />
                 
                 {/* Card content */}
                 <View style={styles.cardContent}>
@@ -41,7 +76,7 @@ const ServiceCard = ({ service, onPress, toggleFavorite, isFavorite }) => {
                             <MaterialCommunityIcons
                                 name={isFavorite ? "heart" : "heart-outline"}
                                 size={20}
-                                color={isFavorite ? "#4B3E2F" : "#8E8E93"}
+                                color={isFavorite ? "#FF3B30" : "#8E8E93"}
                             />
                         </TouchableOpacity>
                     </View>
@@ -75,16 +110,21 @@ const styles = StyleSheet.create({
     cardWrapper: {
         width: wp('43%'),
         marginBottom: 16,
-        // Modern shadow for iOS
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 12,
-        // Modern shadow for Android
-        elevation: 8,
+        // Platform-specific shadow
+        ...Platform.select({
+            ios: {
+                shadowColor: '#000',
+                shadowOffset: {
+                    width: 0,
+                    height: 4,
+                },
+                shadowOpacity: 0.1,
+                shadowRadius: 12,
+            },
+            android: {
+                elevation: 8,
+            },
+        }),
     },
     serviceCard: {
         flex: 1,
@@ -101,12 +141,16 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
+        borderRadius: 23, // Slightly less than card to prevent overflow
     },
     cardContent: {
         padding: 20,
         flex: 1,
         justifyContent: 'space-between',
         minHeight: 160,
+        position: 'relative',
+        zIndex: 2, // Higher zIndex to ensure content is above gradient
+        backgroundColor: 'transparent',
     },
     cardHeader: {
         flexDirection: "row",
@@ -120,30 +164,42 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         justifyContent: "center",
         alignItems: "center",
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
-        elevation: 4,
+        ...Platform.select({
+            ios: {
+                shadowColor: '#000',
+                shadowOffset: {
+                    width: 0,
+                    height: 2,
+                },
+                shadowOpacity: 0.15,
+                shadowRadius: 8,
+            },
+            android: {
+                elevation: 4,
+            },
+        }),
     },
     favoriteButton: {
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
+        ...Platform.select({
+            ios: {
+                shadowColor: '#000',
+                shadowOffset: {
+                    width: 0,
+                    height: 2,
+                },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+            },
+            android: {
+                elevation: 2,
+            },
+        }),
     },
     serviceName: {
         fontSize: 16,
@@ -177,7 +233,8 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         height: 1,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        backgroundColor: 'rgba(255, 255, 255, 0.96)',
+        zIndex: 3,
     },
 });
 

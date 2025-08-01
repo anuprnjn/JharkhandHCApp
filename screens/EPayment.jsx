@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import Navbar from './Components/Navbar';
 
 const EPayment = () => {
  
   const [loading, setLoading] = useState(true);
 
   return (
+    <>
     <View style={styles.container}>
+    <Navbar/>
       {loading && (
         <ActivityIndicator 
           size="large" 
@@ -26,6 +29,7 @@ const EPayment = () => {
         />
       </View>
     </View>
+    </>
   );
 };
 

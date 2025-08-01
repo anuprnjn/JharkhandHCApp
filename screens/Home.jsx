@@ -8,15 +8,15 @@ import bg from '../assets/images/bg_mask1.png';
 const Home = ({ navigation }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  useEffect(() => {
-    if (imageLoaded) {
-      const timer = setTimeout(() => {
-        navigation.replace('DrawerNavigator', { screen: 'Services' });
-      }, 1000);
+useEffect(() => {
+  if (imageLoaded) {
+    const timer = setTimeout(() => {
+      navigation.replace('Services');
+    }, 1000);
 
-      return () => clearTimeout(timer);
-    }
-  }, [imageLoaded, navigation]);
+    return () => clearTimeout(timer);
+  }
+}, [imageLoaded, navigation]);
 
   return (
     <View style={styles.container}>

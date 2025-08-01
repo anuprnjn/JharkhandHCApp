@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, StatusBar, TextInput, TouchableOpacity, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import { 
+  View, 
+  StyleSheet, 
+  ScrollView, 
+  StatusBar, 
+  TextInput, 
+  TouchableOpacity, 
+  Text 
+} from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,141 +15,103 @@ import Toast from 'react-native-toast-message';
 import ServiceCard from "./Components/ServiceCard";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Navbar from "./Components/Navbar";
 
+const FAVORITES_KEY = 'favorites';
+
+const SERVICES_DATA = [
+  { name: "Case Status", icon: "scale-balance", gradient: ["#667eea", "#764ba2"], route: 'CaseStatus'},
+  { name: "Cause List", icon: "file-document-multiple", gradient: ["#f093fb", "#f5576c"], route: 'CauseList'},
+  { name: "Orders & Judgement", icon: "gavel", gradient: ["#4facfe", "#00f2fe"], route: 'OrdersJudgement'},
+  { name: "eFilings", icon: "cloud-upload", gradient: ["#2a8a4aff", "#38f9d7"], route: 'EFiling'},
+  { name: "Display Board", icon: "monitor-dashboard", gradient: ["#fa709a", "#fee140"], route: 'DisplayBoard'},
+  { name: "Certified Copy", icon: "certificate", gradient: ["#efc488ff", "#f88c68ff"], route: 'CertifiedCopy'},
+  { name: "Calendar", icon: "calendar-month", gradient: ["#d7686bff", "#fecfef"], route: 'Calendar'},
+];
+ 
 const Services = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [favorites, setFavorites] = useState([]);
-    const navigation = useNavigation();
+  const [favorites, setFavorites] = useState([]);
+  const navigation = useNavigation();
 
-    const services = [
-        { name: "Case Status", icon: "scale-balance", gradient: ["#667eea", "#764ba2"], route: 'CaseStatus'},
-        { name: "Cause List", icon: "file-document-multiple", gradient: ["#f093fb", "#f5576c"], route: 'CauseList'},
-        { name: "Orders & Judgement", icon: "gavel", gradient: ["#4facfe", "#00f2fe"], route: 'OrdersJudgement'},
-        { name: "eFilings", icon: "cloud-upload", gradient: ["#2a8a4aff", "#38f9d7"], route: 'EFiling'},
-        { name: "Display Board", icon: "monitor-dashboard", gradient: ["#fa709a", "#fee140"], route: 'DisplayBoard'},
-        { name: "Certified Copy", icon: "certificate", gradient: ["#efc488ff", "#f88c68ff"], route: 'CertifiedCopy'},
-        { name: "E-Pass", icon: "card-account-details", gradient: ["#58b4afff", "#ef86a7ff"], route: 'EPass' },
-        { name: "Calendar", icon: "calendar-month", gradient: ["#d7686bff", "#fecfef"], route: 'Calendar'},
-        { name: "VC Link", icon: "video", gradient: ["#667eea", "#764ba2"], route: 'VCLink'},
-        { name: "Legal Aid", icon: "account-group", gradient: ["#70cdf5ff", "#ff80a8ff"], route: 'LegalAid'},
-    ];
-
-    const filteredServices = services
-        .filter(service =>
-            service.name.toLowerCase().includes(searchQuery.toLowerCase()) 
-        )
-        .sort((a, b) => {
-            const aFav = favorites.includes(a.name);
-            const bFav = favorites.includes(b.name);
-            if (aFav && !bFav) return -1;
-            if (!aFav && bFav) return 1;
-            return 0;
-        });
-
-        const toggleFavorite = async (name) => {
-            const updated = favorites.includes(name)
-                ? favorites.filter(item => item !== name)
-                : [...favorites, name];
-
-            setFavorites(updated);
-            try {
-                await AsyncStorage.setItem('favorites', JSON.stringify(updated));
-            } catch (error) {
-                console.error("Failed to save favorites", error);
-            }
-            Toast.show({
-                type: 'success',
-                text1: favorites.includes(name) ? 'Removed from favorites' : `${name} added to favorites`,
-                position: 'bottom',
-                visibilityTime: 2000,
-            });
-        };
-
-    const handleCardPress = (route) => {
-        navigation.navigate(route);
+  useEffect(() => {
+    const loadFavorites = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem(FAVORITES_KEY);
+        if (jsonValue != null) {
+          setFavorites(JSON.parse(jsonValue));
+        }
+      } catch (error) {
+        console.error("Failed to load favorites", error);
+      }
     };
+    loadFavorites();
+  }, []);
 
-    const clearSearch = () => {
-        setSearchQuery('');
-    };
+  // handle favorite button
+  const toggleFavorite = async (name) => {
+    const isFavorite = favorites.includes(name);
 
-    return (
-        <View style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-            
-            {/* Header with Search Bar */}
-            <View style={styles.header}>
-                <View style={styles.searchContainer}>
-                    <MaterialCommunityIcons name="magnify" size={20} color="#9CA3AF" />
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Search services..."
-                        placeholderTextColor="#9CA3AF"
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                    />
-                    {searchQuery.length > 0 && (
-                        <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
-                            <MaterialCommunityIcons name="close-circle" size={20} color="#9CA3AF" />
-                        </TouchableOpacity>
-                    )}
-                </View>
-            </View>
+    let updated;
+    if (isFavorite) {
+      updated = favorites.filter(item => item !== name);
+    } else {
+      // put new favorite at front, keeping all others behind (no dupe)
+      updated = [name, ...favorites.filter(item => item !== name)];
+    }
 
-            <LinearGradient 
-                colors={['#ffffff', '#eeffefff', '#fff0deff']} 
-                start={{ x: 0.5, y: 0 }}
-                end={{ x: 0.5, y: 1 }}
-                style={styles.gradientContainer}
-            >
-                <ScrollView 
-                    contentContainerStyle={styles.scrollContent} 
-                    showsVerticalScrollIndicator={false}
-                >
-                    {/* Services Grid or No Results */}
-                    {filteredServices.length > 0 ? (
-                        <View style={styles.servicesGrid}>
-                            {filteredServices.map((service, index) => (
-                                <ServiceCard
-                                    key={service.name}
-                                    service={service}
-                                    onPress={() => handleCardPress(service.route)}
-                                    toggleFavorite={toggleFavorite}
-                                    isFavorite={favorites.includes(service.name)}
-                                />
-                            ))}
-                        </View>
-                    ) : (
-                        <View style={styles.noResultsContainer}>
-                            <MaterialCommunityIcons 
-                                name="file-search-outline" 
-                                size={64} 
-                                color="#D1D5DB" 
-                            />
-                            <Text style={styles.noResultsTitle}>No services found</Text>
-                            <Text style={styles.noResultsDescription}>
-                                {searchQuery ? 
-                                    `No services match "${searchQuery}". Try a different search term.` :
-                                    "No services available at the moment."
-                                }
-                            </Text>
-                            {searchQuery && (
-                                <TouchableOpacity 
-                                    style={styles.clearSearchButton}
-                                    onPress={clearSearch}
-                                >
-                                    <Text style={styles.clearSearchButtonText}>Clear Search</Text>
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                    )}
-                </ScrollView>
-            </LinearGradient>
-            
-            <Toast />
+    setFavorites(updated);
+
+    try {
+      await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(updated));
+    } catch (error) {
+      console.error("Failed to save favorites", error);
+    }
+
+    Toast.show({
+      type: 'success',
+      text1: isFavorite ? 'Removed from favorites' : `${name} added to favorites`,
+      position: 'bottom',
+      visibilityTime: 2000,
+    });
+  };
+
+  const handleCardPress = (route) => {
+    navigation.navigate(route);
+  };
+
+  // Favorited cards first, most recent favorite at the top
+  const orderedServices = [
+    ...favorites
+      .map(name => SERVICES_DATA.find(service => service.name === name))
+      .filter(Boolean), // drop any old keys that don't exist
+    ...SERVICES_DATA.filter(service => !favorites.includes(service.name)),
+  ];
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <Navbar />
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent} 
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.servicesGrid}>
+          {orderedServices.map((service) => (
+            <ServiceCard
+              key={service.name}
+              service={service}
+              onPress={() => handleCardPress(service.route)}
+              toggleFavorite={toggleFavorite}
+              isFavorite={favorites.includes(service.name)}
+            />
+          ))}
         </View>
-    );
+      </ScrollView>
+      <Toast />
+    </View>
+  );
 };
+
 
 const styles = StyleSheet.create({
     container: {
