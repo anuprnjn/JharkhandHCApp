@@ -69,11 +69,17 @@ const MENU = [
     icon: 'videocam',
     iconType: 'Ionicons',
     route: 'Live Streaming',
-    gradient: ['#fa709a', '#fee140'],
+    gradient: ['#e72e2eff', '#c93589ff'],
+  },
+  {
+    label: 'About Jharkhand High Court',
+    icon: 'information-circle-outline',
+    iconType: 'Ionicons',
+    route: 'About',
+    gradient: ['#a7a7a7ff', '#000000ff'],
   },
   
 ];
-
 
 // Updated FAB gradient: light purple to light peach
 const FAB_GRADIENT = ["#8f8f8fff", "#2f2f2fff"];
@@ -362,7 +368,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   activeText: {
-    color: '#60b821ff',
+    color: '#5a982eff',
     fontWeight: '700',
   },
 });

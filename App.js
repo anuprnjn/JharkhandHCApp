@@ -15,6 +15,7 @@ import CaseFilling from './screens/CaseStatus/CaseFilling';
 import CaseStatus from './screens/CaseStatus/CaseStatus';
 import Toast from 'react-native-toast-message';
 import FloatingQuickMenu from './screens/Components/FloatingQuickMenu';
+import About from './screens/About';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ function MainStack() {
       <Stack.Screen name="CaseStatus" component={CaseStatus} />
       <Stack.Screen name="CaseNumber" component={CaseNumber} />
       <Stack.Screen name="CaseFilling" component={CaseFilling} />
+      <Stack.Screen name="About" component={About} />
     </Stack.Navigator>
   );
 }
