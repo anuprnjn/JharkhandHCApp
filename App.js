@@ -11,6 +11,7 @@ import VirtualCourt from './screens/VirtualCourt';
 import Escr from './screens/Escr';
 import Njdg from './screens/Njdg';
 import CaseNumber from './screens/CaseStatus/CaseNumber';
+import CaseFilling from './screens/CaseStatus/CaseFilling';
 import CaseStatus from './screens/CaseStatus/CaseStatus';
 import Toast from 'react-native-toast-message';
 import FloatingQuickMenu from './screens/Components/FloatingQuickMenu';
@@ -30,6 +31,7 @@ function MainStack() {
       <Stack.Screen name="Live Streaming" component={LiveStreaming} />
       <Stack.Screen name="CaseStatus" component={CaseStatus} />
       <Stack.Screen name="CaseNumber" component={CaseNumber} />
+      <Stack.Screen name="CaseFilling" component={CaseFilling} />
     </Stack.Navigator>
   );
 }

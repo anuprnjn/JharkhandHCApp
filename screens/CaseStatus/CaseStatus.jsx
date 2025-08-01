@@ -32,7 +32,7 @@ const CaseStatus = () => {
       name: "Filing Number",
       icon: "file-document-edit-outline",
       gradient: ["#f093fb", "#f5576c"],
-      route: "FilingNumber",
+      route: "CaseFilling",
     },
     {
       name: "Party Name",

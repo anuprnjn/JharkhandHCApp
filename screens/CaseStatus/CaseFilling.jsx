@@ -20,7 +20,7 @@ import OrdersSection from '../Components/NapixComponents/OrdersSection';
 import CategoryDetails from '../Components/NapixComponents/CategoryDetails';
 import CaseDetailsNotFound from '../Components/NapixComponents/CaseDetailsNotFound';
 
-const CaseNumber = () => {
+const CaseFilling = () => {
   const [caseTypeOptions, setCaseTypeOptions] = useState([]);
   const [caseType, setCaseType] = useState('');
   const [caseNumber, setCaseNumber] = useState('');
@@ -143,7 +143,7 @@ const CaseNumber = () => {
       const timeoutId = setTimeout(() => controller.abort(), 15000);
 
       const response = await fetch(
-        "http://10.134.8.12/jhc_app_api/searchByCaseNoHcNapix.php",
+        "http://10.134.8.12/jhc_app_api/searchByfilingNoHcNapix.php",
         {
           method: "POST",
           headers: {
@@ -246,7 +246,7 @@ const CaseNumber = () => {
       return;
     }
     setError(false); setShowResults(false); setSearchResults(null); setShowNotFound(false);
-    const searchData = { case_type: caseType, reg_no: caseNumber, reg_year: caseYear };
+    const searchData = { case_type: caseType, fil_no: caseNumber, fil_year: caseYear };
     await searchCaseByNumber(searchData);
   };
 
@@ -379,19 +379,19 @@ const CaseNumber = () => {
           </TouchableOpacity>
         )}
         <CustomInput
-          label="Case Number"
+          label="Filling Number"
           value={caseNumber}
           onChangeText={(text) => { setCaseNumber(text); if (error) setError(false); }}
-          placeholder="Enter Case Number"
+          placeholder="Enter Filling Number"
           keyboardType="numeric"
           req="true"
           editable={!searchLoading}
         />
         <CustomInput
-          label="Case Year"
+          label="Filling Year"
           value={caseYear}
           onChangeText={(text) => { setCaseYear(text); if (error) setError(false); }}
-          placeholder="Enter Case Year (e.g., 2025)"
+          placeholder="Enter Filling Year (e.g., 2025)"
           keyboardType="numeric"
           maxLength={4}
           req="true"
@@ -503,4 +503,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CaseNumber;
+export default CaseFilling;
