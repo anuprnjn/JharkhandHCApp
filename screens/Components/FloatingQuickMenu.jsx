@@ -37,11 +37,11 @@ const MENU = [
     gradient: ['#667eea', '#764ba2'],
   },
   {
-    label: 'E-Pay',
-    icon: 'credit-card',
-    iconType: 'FontAwesome',
-    route: 'E-Pay',
-    gradient: ['#1de9b6', '#1dc8cd'],
+    label: 'eScr',
+    icon: 'book-outline',
+    iconType: 'Ionicons',
+    route: 'eScr',
+    gradient: ['#efc488', '#f88c68'],
   },
   {
     label: 'Virtual Court',
@@ -51,11 +51,11 @@ const MENU = [
     gradient: ['#4facfe', '#00f2fe'],
   },
   {
-    label: 'eScr',
-    icon: 'book-outline',
-    iconType: 'Ionicons',
-    route: 'eScr',
-    gradient: ['#efc488', '#f88c68'],
+    label: 'E-Pay',
+    icon: 'credit-card',
+    iconType: 'FontAwesome',
+    route: 'E-Pay',
+    gradient: ['#1de9b6', '#1dc8cd'],
   },
   {
     label: 'NJDG',
