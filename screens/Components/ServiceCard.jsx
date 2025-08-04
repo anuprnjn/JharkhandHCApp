@@ -4,6 +4,7 @@ import { Text, View, TouchableOpacity, StyleSheet, Platform } from "react-native
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from 'expo-linear-gradient';
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import * as Haptics from 'expo-haptics';
 
 const ServiceCard = ({ service, onPress, toggleFavorite, isFavorite }) => {
     // Function to extract hex color and convert to rgba
@@ -28,12 +29,71 @@ const ServiceCard = ({ service, onPress, toggleFavorite, isFavorite }) => {
         return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     };
 
+    // Handle favorite toggle with haptics
+    const handleFavoritePress = () => {
+        // Trigger haptic feedback
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        
+        toggleFavorite(service.name);
+    };
+
     // Create gradient colors with proper opacity
     const gradientColors = [
         hexToRgba(service.gradient[0], 0.12),
         hexToRgba(service.gradient[1], 0.06),
         'rgba(255, 255, 255, 0.95)'
     ];
+
+    // Dynamic heart button shadow style
+    const getHeartButtonStyle = () => {
+        const baseStyle = {
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            justifyContent: 'center',
+            alignItems: 'center',
+        };
+
+        if (isFavorite) {
+            return {
+                ...baseStyle,
+                ...Platform.select({
+                    ios: {
+                        shadowColor: '#FF3B30',
+                        shadowOffset: {
+                            width: 0,
+                            height: 3,
+                        },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 6,
+                    },
+                    android: {
+                        elevation: 4,
+                        shadowColor: '#FF3B30',
+                    },
+                }),
+            };
+        } else {
+            return {
+                ...baseStyle,
+                ...Platform.select({
+                    ios: {
+                        shadowColor: '#000',
+                        shadowOffset: {
+                            width: 0,
+                            height: 2,
+                        },
+                        shadowOpacity: 0.1,
+                        shadowRadius: 4,
+                    },
+                    android: {
+                        elevation: 2,
+                    },
+                }),
+            };
+        }
+    };
 
     return (
         <View style={styles.cardWrapper}>
@@ -62,15 +122,15 @@ const ServiceCard = ({ service, onPress, toggleFavorite, isFavorite }) => {
                         >
                             <MaterialCommunityIcons 
                                 name={service.icon} 
-                                size={24} 
+                                size={28} 
                                 color="#FFFFFF" 
                             />
                         </LinearGradient>
                         
-                        {/* Favorite button */}
+                        {/* Favorite button with dynamic shadow */}
                         <TouchableOpacity 
-                            onPress={() => toggleFavorite(service.name)}
-                            style={styles.favoriteButton}
+                            onPress={handleFavoritePress}
+                            style={getHeartButtonStyle()}
                             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         >
                             <MaterialCommunityIcons
@@ -89,10 +149,10 @@ const ServiceCard = ({ service, onPress, toggleFavorite, isFavorite }) => {
                     {/* Access button */}
                     <View style={styles.accessButton}>
                         <Text style={[styles.accessText, { color: service.gradient[0] }]}>
-                            Open
+                            Launch
                         </Text>
                         <MaterialCommunityIcons 
-                            name="arrow-top-right" 
+                            name="launch" 
                             size={16} 
                             color={service.gradient[0]} 
                         />
@@ -176,28 +236,6 @@ const styles = StyleSheet.create({
             },
             android: {
                 elevation: 4,
-            },
-        }),
-    },
-    favoriteButton: {
-        width: 32,
-        height: 32,
-        borderRadius: 16,
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        ...Platform.select({
-            ios: {
-                shadowColor: '#000',
-                shadowOffset: {
-                    width: 0,
-                    height: 2,
-                },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-            },
-            android: {
-                elevation: 2,
             },
         }),
     },
