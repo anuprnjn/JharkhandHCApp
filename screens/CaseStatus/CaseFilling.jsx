@@ -487,6 +487,7 @@ const styles = StyleSheet.create({
     fontSize: wp('6%'),
     fontWeight: 'bold',
     color: '#2c3e50',
+    marginLeft: wp("1%")
   },
   newSearchButton: {
     flexDirection: 'row',
