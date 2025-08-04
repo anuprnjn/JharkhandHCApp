@@ -3,17 +3,12 @@ import {
   View, 
   StyleSheet, 
   ScrollView, 
-  StatusBar, 
-  TextInput, 
-  TouchableOpacity, 
-  Text 
+  StatusBar,  
 } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
 import ServiceCard from "./Components/ServiceCard";
-import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Navbar from "./Components/Navbar";
 

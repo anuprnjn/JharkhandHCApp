@@ -1,0 +1,5 @@
+npm install -g eas-cli
+sudo npm install -g eas-cli
+eas login
+eas update --branch main --message "Your update message here"
+                            
