@@ -2,6 +2,8 @@ import 'react-native-gesture-handler';
 import React, { useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Toast from 'react-native-toast-message';
+
 import Home from './screens/Home';
 import Services from './screens/Services';
 import LiveStreaming from './screens/LiveStreaming';
@@ -13,9 +15,10 @@ import Njdg from './screens/Njdg';
 import CaseNumber from './screens/CaseStatus/CaseNumber';
 import CaseFilling from './screens/CaseStatus/CaseFilling';
 import CaseStatus from './screens/CaseStatus/CaseStatus';
-import Toast from 'react-native-toast-message';
 import FloatingQuickMenu from './screens/Components/FloatingQuickMenu';
 import About from './screens/About';
+import ThemeSettings from './screens/ThemeSettings';
+import { ThemeProvider } from './Context/ThemeContext'; 
 
 const Stack = createStackNavigator();
 
@@ -34,6 +37,7 @@ function MainStack() {
       <Stack.Screen name="CaseNumber" component={CaseNumber} />
       <Stack.Screen name="CaseFilling" component={CaseFilling} />
       <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="ThemeSettings" component={ThemeSettings} />
     </Stack.Navigator>
   );
 }
@@ -43,19 +47,21 @@ export default function App() {
   const [routeName, setRouteName] = useState();
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      onReady={() => {
-        setRouteName(navigationRef.current.getCurrentRoute().name);
-      }}
-      onStateChange={() => {
-        const currentRouteName = navigationRef.current.getCurrentRoute().name;
-        setRouteName(currentRouteName);
-      }}
-    >
-      <MainStack />
-      {routeName !== 'Home' && <FloatingQuickMenu />}
-      <Toast />
-    </NavigationContainer>
+    <ThemeProvider> {/* ✅ Wrap with ThemeProvider */}
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          setRouteName(navigationRef.current.getCurrentRoute().name);
+        }}
+        onStateChange={() => {
+          const currentRouteName = navigationRef.current.getCurrentRoute().name;
+          setRouteName(currentRouteName);
+        }}
+      >
+        <MainStack />
+        {routeName !== 'Home' && <FloatingQuickMenu />}
+        <Toast />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }

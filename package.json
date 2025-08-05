@@ -20,6 +20,7 @@
     "expo": "^53.0.0",
     "expo-blur": "~14.1.5",
     "expo-constants": "~17.1.7",
+    "expo-haptics": "~14.1.4",
     "expo-linear-gradient": "~14.1.5",
     "expo-status-bar": "~2.2.3",
     "expo-updates": "~0.28.17",
@@ -31,6 +32,7 @@
     "react-native-gesture-handler": "~2.24.0",
     "react-native-haptic-feedback": "^2.3.3",
     "react-native-linear-gradient": "^2.8.3",
+    "react-native-modal": "^14.0.0-rc.1",
     "react-native-notificated": "^0.1.7",
     "react-native-picker-select": "^9.3.1",
     "react-native-reanimated": "~3.17.4",
@@ -40,8 +42,7 @@
     "react-native-toast-message": "^2.3.3",
     "react-native-vector-icons": "^10.3.0",
     "react-native-webview": "13.13.5",
-    "zeego": "^3.0.6",
-    "expo-haptics": "~14.1.4"
+    "zeego": "^3.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0"

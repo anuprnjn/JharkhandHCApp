@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Text } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
 import Toast from 'react-native-toast-message';
-import Navbar from "../Components/Navbar";
-import ServiceCard from "../Components/ServiceCard";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Navbar from "../Components/Navbar";
+import ServiceCard from "../Components/ServiceCard";
+import HeadingText from "../Components/HeadingText";
+import { useTheme } from "../../Context/ThemeContext"; // ⬅️ Import Theme Context
+
 const CaseStatus = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const [favorites, setFavorites] = useState([]);
   const navigation = useNavigation();
-  
-  // Define the AsyncStorage key
+  const { colors, isDark } = useTheme(); // ⬅️ Use theme
+
   const FAVORITES_KEY = '@case_status_favorites';
 
   const SERVICES_DATA = [
@@ -56,17 +59,11 @@ const CaseStatus = () => {
     loadFavorites();
   }, []);
 
-  // handle favorite button
   const toggleFavorite = async (name) => {
     const isFavorite = favorites.includes(name);
-
-    let updated;
-    if (isFavorite) {
-      updated = favorites.filter(item => item !== name);
-    } else {
-      // put new favorite at front, keeping all others behind (no dupe)
-      updated = [name, ...favorites.filter(item => item !== name)];
-    }
+    const updated = isFavorite
+      ? favorites.filter(item => item !== name)
+      : [name, ...favorites.filter(item => item !== name)];
 
     setFavorites(updated);
 
@@ -88,21 +85,25 @@ const CaseStatus = () => {
     navigation.navigate(route);
   };
 
-  // Favorited cards first, most recent favorite at the top
   const orderedServices = [
     ...favorites
       .map(name => SERVICES_DATA.find(service => service.name === name))
-      .filter(Boolean), // drop any old keys that don't exist
+      .filter(Boolean),
     ...SERVICES_DATA.filter(service => !favorites.includes(service.name)),
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Navbar />
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        <HeadingText
+          icon="gavel"
+          heading="Check the Case Status"
+          subHeading="Use multiple search options to check case progress."
+        />
         <View style={styles.servicesGrid}>
           {orderedServices.map((service) => (
             <ServiceCard
@@ -123,74 +124,16 @@ const CaseStatus = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
-  },
-  gradientContainer: {
-    flex: 1,
   },
   scrollContent: {
     padding: wp('5%'),
     paddingBottom: 80,
     flexGrow: 1,
   },
-  sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-    paddingHorizontal: 4,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#374151",
-    marginLeft: 6,
-  },
   servicesGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-  },
-  // No Results Styles
-  noResultsContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: hp('15%'),
-    paddingHorizontal: wp('10%'),
-  },
-  noResultsTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#374151',
-    marginTop: 24,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  noResultsDescription: {
-    fontSize: 16,
-    color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 24,
-    marginBottom: 32,
-  },
-  clearSearchButton: {
-    backgroundColor: '#4B3E2F',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 12,
-    shadowColor: '#4B3E2F',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  clearSearchButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
 

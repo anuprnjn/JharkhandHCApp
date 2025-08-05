@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Platform } from 'react-native';
+import { useTheme } from '../../Context/ThemeContext'; // adjust path if needed
 
 const CustomInput = ({
   label,
@@ -9,14 +10,15 @@ const CustomInput = ({
   keyboardType = 'default',
   maxLength,
   style,
-  req,                            // expects string "true" or other
-  placeholderTextColor = "#8E8E93",
+  req,
   ...rest
 }) => {
+  const { isDark, colors } = useTheme();
+
   return (
     <View style={styles.container}>
       {label && (
-        <Text style={styles.label}>
+        <Text style={[styles.label, { color: colors.text }]}>
           {label}
           {req === "true" ? (
             <Text style={{ color: 'red' }}> *</Text>
@@ -24,11 +26,19 @@ const CustomInput = ({
         </Text>
       )}
       <TextInput
-        style={[styles.input, style]}
+        style={[
+          styles.input,
+          {
+            backgroundColor: colors.card,
+            color: colors.text,
+            borderColor: colors.border,
+          },
+          style
+        ]}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={placeholderTextColor}
+        placeholderTextColor={isDark ? '#999' : '#8E8E93'}
         keyboardType={keyboardType}
         maxLength={maxLength}
         {...rest}
@@ -46,18 +56,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 8,
-    color: '#4B3E2F',
   },
   input: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 16,
     fontSize: 17,
-    color: '#000000',
     minHeight: 44,
     borderWidth: Platform.OS === 'ios' ? 0.5 : 1,
-    borderColor: '#C7C7CC',
     ...Platform.select({
       ios: {
         shadowColor: '#000',

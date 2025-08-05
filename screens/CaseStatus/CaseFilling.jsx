@@ -7,10 +7,12 @@ import Navbar from '../Components/Navbar';
 import CustomDropdown from '../Components/CustomDropdown';
 import Button from '../Components/Button';
 import CustomInput from '../Components/CustomInput';
-
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-// Modular Information Sections:
+// 🌓 THEME: Import useTheme hook
+import { useTheme } from '../../Context/ThemeContext';
+
+// Modular Sections
 import BasicCaseInfo from '../Components/NapixComponents/BasicCaseInfo';
 import PartiesInfo from '../Components/NapixComponents/PartiesInfo';
 import CourtInfo from '../Components/NapixComponents/CourtInfo';
@@ -19,8 +21,10 @@ import HearingHistory from '../Components/NapixComponents/HearingHistory';
 import OrdersSection from '../Components/NapixComponents/OrdersSection';
 import CategoryDetails from '../Components/NapixComponents/CategoryDetails';
 import CaseDetailsNotFound from '../Components/NapixComponents/CaseDetailsNotFound';
+import HeadingText from '../Components/HeadingText';
 
 const CaseFilling = () => {
+  const { colors, isDark } = useTheme(); // 🌓 THEME: Access theme
   const [caseTypeOptions, setCaseTypeOptions] = useState([]);
   const [caseType, setCaseType] = useState('');
   const [caseNumber, setCaseNumber] = useState('');
@@ -37,9 +41,8 @@ const CaseFilling = () => {
       setLoading(true);
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
-
       const response = await fetch(
-        "http://10.134.8.12/jhc_app_api/fetchCaseTypeHcNapix.php",
+        "http://192.168.29.27/jhc_app_api/fetchCaseTypeHcNapix.php",
         {
           method: "GET",
           headers: {
@@ -49,195 +52,33 @@ const CaseFilling = () => {
           signal: controller.signal,
         }
       );
-
       clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const responseText = await response.text();
-
-      if (!responseText || responseText.trim() === '') {
-        throw new Error('Empty response from server');
-      }
-
-      let data;
-      try {
-        data = JSON.parse(responseText);
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        throw new Error('Invalid JSON response from server');
-      }
-
-      if (!data || typeof data !== 'object') {
-        throw new Error('Invalid data format received');
-      }
-
+      if (!responseText || responseText.trim() === '') throw new Error('Empty response from server');
+      let data = JSON.parse(responseText);
       const caseTypesArray = Object.values(data);
-
-      if (caseTypesArray.length === 0) {
-        setCaseTypeOptions([]);
-        return;
-      }
-
-      const formattedData = caseTypesArray.map((item, index) => {
-        if (!item || typeof item !== 'object') {
-          console.warn(`Invalid item at index ${index}:`, item);
-          return null;
-        }
-
-        const label = item.type_name || 'Unknown Case Type';
-        const value = item.case_type || `unknown_${index}`;
-
-        return {
-          label: label,
-          value: value,
-        };
-      }).filter(Boolean);
+      const formattedData = caseTypesArray.map((item, index) => ({
+        label: item.type_name || 'Unknown Case Type',
+        value: item.case_type || `unknown_${index}`,
+      }));
       setCaseTypeOptions(formattedData);
-
     } catch (error) {
-      
-      let errorMessage = 'Failed to load case types';
-      
-      if (error.name === 'AbortError') {
-        errorMessage = 'Request timed out. Please check your internet connection.';
-      } else if (error.message.includes('Network request failed')) {
-        errorMessage = 'Network error. Please check your internet connection.';
-      } else if (error.message.includes('JSON')) {
-        errorMessage = 'Server returned invalid data.';
-      }
-
       Alert.alert(
-        "Loading Error", 
-        errorMessage,
+        "Loading Error",
+        "Failed to load case types. Please check your internet connection.",
         [
-          {
-            text: "Retry",
-            onPress: () => fetchCaseTypes(),
-          },
-          {
-            text: "Cancel",
-            style: "cancel"
-          }
+          { text: "Retry", onPress: () => fetchCaseTypes() },
+          { text: "Cancel", style: "cancel" },
         ]
       );
-      
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => { fetchCaseTypes(); }, []);
-
-  const handleCaseTypeSelect = (item) => {
-    setCaseType(item.value); if (error) setError(false);
-  };
-
-  const searchCaseByNumber = async (searchData) => {
-    try {
-      setSearchLoading(true);
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-      const response = await fetch(
-        "http://10.134.8.12/jhc_app_api/searchByfilingNoHcNapix.php",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-          },
-          body: JSON.stringify(searchData),
-          signal: controller.signal,
-        }
-      );
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const responseText = await response.text();
-      if (!responseText || responseText.trim() === '') {
-        throw new Error('Empty response from server');
-      }
-
-      let data;
-      try {
-        data = JSON.parse(responseText);
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        console.error('Response that failed to parse:', responseText);
-        throw new Error('Invalid JSON response from server');
-      }
-
-      // Handle different response formats
-      if (data && typeof data === 'object') {
-        // Check for RECORD_NOT_FOUND status
-        if (data.status_code === "628" && data.status === "RECORD_NOT_FOUND") {
-          setShowNotFound(true);
-          setSearchResults(null);
-          setShowResults(false);
-        } else if (data.error) {
-          Alert.alert('Search Error', data.error);
-          setSearchResults(null);
-          setShowResults(false);
-          setShowNotFound(false);
-        } else if (data.message && data.message.toLowerCase().includes('no data found')) {
-          setShowNotFound(true);
-          setSearchResults(null);
-          setShowResults(false);
-        } else {
-          // Success - show the response
-          setSearchResults(data);
-          setShowResults(true);
-          setShowNotFound(false);
-        }
-      } else {
-        throw new Error('Invalid response format');
-      }
-
-    } catch (error) {
-      console.error('Search API Error:', error);
-      
-      let errorMessage = 'Failed to search case';
-      
-      if (error.name === 'AbortError') {
-        errorMessage = 'Search timed out. Please try again.';
-      } else if (error.message.includes('Network request failed')) {
-        errorMessage = 'Network error. Please check your internet connection.';
-      } else if (error.message.includes('JSON')) {
-        errorMessage = 'Server returned invalid data.';
-      } else if (error.message.includes('HTTP error')) {
-        errorMessage = 'Server error. Please try again later.';
-      }
-
-      Alert.alert(
-        "Search Error", 
-        errorMessage,
-        [
-          {
-            text: "Retry",
-            onPress: () => handleSearchCase(),
-          },
-          {
-            text: "Cancel",
-            style: "cancel"
-          }
-        ]
-      );
-      
-      setSearchResults(null);
-      setShowResults(false);
-      setShowNotFound(false);
-      
-    } finally {
-      setSearchLoading(false);
-    }
-  };
+  const handleCaseTypeSelect = (item) => { setCaseType(item.value); if (error) setError(false); };
 
   const handleSearchCase = async () => {
     if (!caseType || !caseNumber || !caseYear) { setError(true); return; }
@@ -248,6 +89,34 @@ const CaseFilling = () => {
     setError(false); setShowResults(false); setSearchResults(null); setShowNotFound(false);
     const searchData = { case_type: caseType, fil_no: caseNumber, fil_year: caseYear };
     await searchCaseByNumber(searchData);
+  };
+
+  const searchCaseByNumber = async (searchData) => {
+    try {
+      setSearchLoading(true);
+      const response = await fetch("http://192.168.29.27/jhc_app_api/searchByfilingNoHcNapix.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(searchData),
+      });
+      const responseText = await response.text();
+      const data = JSON.parse(responseText);
+
+      if (data?.status_code === "628" && data?.status === "RECORD_NOT_FOUND") {
+        setShowNotFound(true);
+      } else {
+        setSearchResults(data);
+        setShowResults(true);
+        setShowNotFound(false);
+      }
+    } catch (error) {
+      Alert.alert("Search Error", "Something went wrong while searching the case.");
+    } finally {
+      setSearchLoading(false);
+    }
   };
 
   const handleNewSearch = () => {
@@ -265,7 +134,6 @@ const CaseFilling = () => {
     handleSearchCase();
   };
 
-  /** --- Utility functions --- **/
   const formatDate = dateString => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -273,6 +141,7 @@ const CaseFilling = () => {
       day: '2-digit', month: 'short', year: 'numeric'
     });
   };
+
   const decodeHtmlEntities = text => {
     if (!text) return text;
     return text
@@ -284,7 +153,6 @@ const CaseFilling = () => {
       .replace(/&nbsp;/g, ' ');
   };
 
-  /** --- Main Render For Results --- **/
   const renderCaseDetails = () => {
     if (!searchResults) return null;
     const regData = searchResults.registration_data;
@@ -292,35 +160,30 @@ const CaseFilling = () => {
     const caseInfo = regData?.casenos?.case1;
 
     return (
-      <View style={styles.resultsContainer}>
+      <View style={[styles.resultsContainer]}>
         <View style={styles.resultsHeader}>
-          <Text style={styles.resultsTitle}>Case Details Found</Text>
+         <Text style={[styles.resultsTitle, { color: isDark ? colors.highlight : '#000000' }]}>
+          Case Details Found
+        </Text>
           <TouchableOpacity onPress={handleNewSearch} style={styles.newSearchButton}>
             <Ionicons name="add-circle-outline" size={20} color="#2a8a4a" />
             <Text style={styles.newSearchText}>New Search</Text>
           </TouchableOpacity>
         </View>
-
         <BasicCaseInfo caseInfo={caseInfo} cnrData={cnrData} formatDate={formatDate} />
         <PartiesInfo caseInfo={caseInfo} cnrData={cnrData} />
         <CourtInfo regData={regData} cnrData={cnrData} decodeHtml={decodeHtmlEntities} />
         <SubordinateCourtInfo cnrData={cnrData} />
         <HearingHistory history={cnrData?.historyofcasehearing} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
-        <OrdersSection
-          interimOrders={cnrData?.interimorder}
-          finalOrders={cnrData?.finalorder}
-          formatDate={formatDate}
-          decodeHtml={decodeHtmlEntities}
-        />
+        <OrdersSection interimOrders={cnrData?.interimorder} finalOrders={cnrData?.finalorder} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
         <CategoryDetails category={cnrData?.category_details} />
       </View>
     );
   };
 
-  // Show case not found screen
   if (showNotFound) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <Navbar />
         <CaseDetailsNotFound
           caseType={caseType}
@@ -334,10 +197,9 @@ const CaseFilling = () => {
     );
   }
 
-  // Show case results
   if (showResults && searchResults) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <Navbar />
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
           {renderCaseDetails()}
@@ -346,16 +208,20 @@ const CaseFilling = () => {
     );
   }
 
-  // Show search form
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Navbar />
-      {/* <Text style={styles.title}>Search case by Case Number</Text> */}
       <ScrollView
         contentContainerStyle={styles.formContainer}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.label}>
+        <HeadingText
+          icon="magnify"
+          iconType="material-community"
+          heading="Search case by Filling Number"
+          subHeading="Search your case by filling number."
+        />
+        <Text style={[styles.label, { color: colors.text }]}>
           High Court Case Types <Text style={{ color: 'red' }}>*</Text>
         </Text>
         <CustomDropdown
@@ -370,25 +236,17 @@ const CaseFilling = () => {
           searchable={true}
           style={styles.dropdown}
         />
-        {caseTypeOptions.length === 0 && !loading && (
-          <TouchableOpacity
-            style={styles.retryButton}
-            onPress={fetchCaseTypes}
-          >
-            <Text style={styles.retryText}>Retry Loading Case Types</Text>
-          </TouchableOpacity>
-        )}
         <CustomInput
           label="Filling Number"
           value={caseNumber}
           onChangeText={(text) => { setCaseNumber(text); if (error) setError(false); }}
-          placeholder="Enter Filling Number"
+          placeholder="Filling Case Number"
           keyboardType="numeric"
           req="true"
           editable={!searchLoading}
         />
         <CustomInput
-          label="Filling Year"
+          label="Case Filling"
           value={caseYear}
           onChangeText={(text) => { setCaseYear(text); if (error) setError(false); }}
           placeholder="Enter Filling Year (e.g., 2025)"
@@ -398,7 +256,7 @@ const CaseFilling = () => {
           editable={!searchLoading}
         />
         {error && (
-          <Text style={styles.erro_message}>
+          <Text style={[styles.erro_message, { color: 'red' }]}>
             Please Fill all Required fields !
           </Text>
         )}
@@ -409,8 +267,8 @@ const CaseFilling = () => {
         />
         {searchLoading && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#2a8a4a" />
-            <Text style={styles.loadingText}>Searching for case...</Text>
+            <ActivityIndicator size="large" color={colors.highlight} />
+            <Text style={[styles.loadingText, { color: colors.text }]}>Searching for case...</Text>
           </View>
         )}
       </ScrollView>
@@ -421,45 +279,22 @@ const CaseFilling = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffffff',
   },
   scrollContainer: {
     flex: 1,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 20,
-    color: '#000',
-    marginTop: -1,
   },
   formContainer: {
     padding: 20,
   },
   label: {
     fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#4B3E2F',
-    fontWeight: 700
+    fontWeight: '700',
+    marginBottom: 10,
   },
   dropdown: {
     marginBottom: 20,
   },
-  retryButton: {
-    backgroundColor: '#ff6b6b',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  retryText: {
-    color: 'white',
-    fontWeight: '600',
-  },
   erro_message: {
-    color: 'red',
     fontSize: 14,
     marginTop: 10,
     textAlign: 'center',
@@ -471,7 +306,6 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    color: '#666',
   },
   resultsContainer: {
     padding: wp('4%'),
@@ -486,7 +320,7 @@ const styles = StyleSheet.create({
   resultsTitle: {
     fontSize: wp('6%'),
     fontWeight: 'bold',
-    color: '#2c3e50',
+    marginLeft: 4
   },
   newSearchButton: {
     flexDirection: 'row',

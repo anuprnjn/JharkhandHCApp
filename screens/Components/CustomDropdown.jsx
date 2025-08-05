@@ -11,6 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../Context/ThemeContext'; // ✅ Import theme hook
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -27,6 +28,7 @@ const CustomDropdown = ({
   searchable = true,
   renderItem: customRenderItem,
 }) => {
+  const { isDark, colors } = useTheme(); // ✅ Use theme context
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
 
@@ -51,16 +53,17 @@ const CustomDropdown = ({
     <TouchableOpacity
       style={[
         styles.listItem,
+        { backgroundColor: colors.background, borderBottomColor: colors.border },
         index === filteredData.length - 1 && styles.lastItem
       ]}
       onPress={() => handleSelect(item)}
       activeOpacity={0.6}
     >
-      <Text style={styles.listItemText} numberOfLines={2}>
+      <Text style={[styles.listItemText, { color: colors.text }]} numberOfLines={2}>
         {item.label}
       </Text>
       {value === item.value && (
-        <Ionicons name="checkmark" size={20} color="#4B3E2F" />
+        <Ionicons name="checkmark" size={20} color={colors.text} />
       )}
     </TouchableOpacity>
   );
@@ -69,10 +72,10 @@ const CustomDropdown = ({
 
   return (
     <>
-      {/* Dropdown Trigger */}
       <TouchableOpacity
         style={[
           styles.dropdownTrigger,
+          { backgroundColor: colors.card, borderColor: colors.border },
           disabled && styles.triggerDisabled,
           style
         ]}
@@ -82,27 +85,29 @@ const CustomDropdown = ({
       >
         {loading ? (
           <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>Loading...</Text>
+            <Text style={[styles.loadingText, { color: colors.text }]}>Loading...</Text>
           </View>
         ) : (
           <>
-            <Text style={[
-              styles.triggerText,
-              !selectedItem && styles.placeholderText
-            ]} numberOfLines={1}>
+            <Text
+              style={[
+                styles.triggerText,
+                { color: selectedItem ? colors.text : '#8E8E93' }
+              ]}
+              numberOfLines={1}
+            >
               {selectedItem ? selectedItem.label : placeholder}
             </Text>
-            <Ionicons 
-              name="chevron-forward" 
-              size={18} 
-              color={disabled ? "#C7C7CC" : "#8E8E93"} 
+            <Ionicons
+              name="chevron-forward"
+              size={18}
+              color={disabled ? "#C7C7CC" : "#8E8E93"}
               style={styles.chevron}
             />
           </>
         )}
       </TouchableOpacity>
 
-      {/* Modal */}
       <Modal
         animationType="slide"
         transparent={false}
@@ -110,26 +115,24 @@ const CustomDropdown = ({
         presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "fullScreen"}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
-          {/* Navigation Bar */}
-          <View style={styles.navBar}>
+        <View style={[styles.modalContainer, { backgroundColor: colors.background }]}>
+          <View style={[styles.navBar, { backgroundColor: colors.background }]}>
             <TouchableOpacity
               style={styles.navButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={[styles.cancelText, { color: colors.error }]}>Cancel</Text>
             </TouchableOpacity>
-            <Text style={styles.navTitle}>{title}</Text>
+            <Text style={[styles.navTitle, { color: colors.text }]}>{title}</Text>
             <View style={styles.navButton} />
           </View>
 
-          {/* Search Bar */}
           {searchable && (
-            <View style={styles.searchBarContainer}>
-              <View style={styles.searchBar}>
+            <View style={[styles.searchBarContainer, { backgroundColor: colors.background }]}>
+              <View style={[styles.searchBar, { backgroundColor: isDark ? '#2c2c2e' : '#E9E9EA' }]}>
                 <Ionicons name="search" size={16} color="#8E8E93" />
                 <TextInput
-                  style={styles.searchInput}
+                  style={[styles.searchInput, { color: colors.text }]}
                   placeholder={searchPlaceholder}
                   placeholderTextColor="#8E8E93"
                   value={searchText}
@@ -145,7 +148,6 @@ const CustomDropdown = ({
             </View>
           )}
 
-          {/* List */}
           <FlatList
             data={filteredData}
             renderItem={renderItemComponent}
@@ -156,7 +158,7 @@ const CustomDropdown = ({
             keyboardShouldPersistTaps="handled"
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>
+                <Text style={[styles.emptyText, { color: colors.text }]}>
                   {searchText ? 'No results found' : 'No options available'}
                 </Text>
               </View>
@@ -170,7 +172,6 @@ const CustomDropdown = ({
 
 const styles = StyleSheet.create({
   dropdownTrigger: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 16,
@@ -179,7 +180,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: Platform.OS === 'ios' ? 0.5 : 1,
-    borderColor: '#C7C7CC',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -193,17 +193,12 @@ const styles = StyleSheet.create({
     }),
   },
   triggerDisabled: {
-    backgroundColor: '#F2F2F7',
     opacity: 0.6,
   },
   triggerText: {
     fontSize: 17,
-    color: '#000000',
     flex: 1,
     fontWeight: '400',
-  },
-  placeholderText: {
-    color: '#8E8E93',
   },
   chevron: {
     marginLeft: 8,
@@ -213,14 +208,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: '#8E8E93',
     fontSize: 17,
   },
-
-  // Modal Styles
   modalContainer: {
     flex: 1,
-    backgroundColor: '#ffffffff',
   },
   navBar: {
     flexDirection: 'row',
@@ -229,30 +220,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === 'ios' ? 54 : 20,
     paddingBottom: 16,
-    backgroundColor: '#ffffffff'
   },
   navButton: {
     minWidth: 60,
   },
   cancelText: {
-    color: '#4B3E2F',
     fontSize: 17,
     fontWeight: '600',
   },
   navTitle: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#000000',
   },
-
-  // Search Bar
   searchBarContainer: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#fff',
   },
   searchBar: {
-    backgroundColor: '#E9E9EA',
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -262,13 +246,10 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 17,
-    color: '#000000',
     marginLeft: 8,
     marginRight: 8,
-    paddingVertical: 6
+    paddingVertical: 6,
   },
-
-  // List Styles
   list: {
     flex: 1,
   },
@@ -277,21 +258,18 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   listItem: {
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
     paddingVertical: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 0.5,
-    borderBottomColor: '#C7C7CC',
   },
   lastItem: {
     borderBottomWidth: 0,
   },
   listItemText: {
     fontSize: 17,
-    color: '#000000',
     flex: 1,
     marginRight: 16,
     lineHeight: 22,
@@ -302,7 +280,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 17,
-    color: '#8E8E93',
   },
 });
 

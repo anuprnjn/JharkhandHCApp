@@ -11,7 +11,7 @@ const Button = ({ onPress, text, disabled = false }) => {
       activeOpacity={0.75}
     >
       <LinearGradient
-        colors={disabled ? ['#bcbcbcff', '#959595ff'] : ['#10b981', '#00a671ff']}
+        colors={disabled ? ['#bcbcbcff', '#959595ff'] : ['#55da5bff', '#00a671ff']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}

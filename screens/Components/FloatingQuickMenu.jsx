@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,16 +16,18 @@ import { useNavigation, useNavigationState } from '@react-navigation/native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
+import { useTheme } from '../../Context/ThemeContext'; // your theme hook
 
 const { width, height } = Dimensions.get('window');
 const FAB_SIZE = 60;
 const FAB_MARGIN = 30;
+const BOTTOM_MARGIN = 30;  // Reduced bottom margin
 
 const CORNERS = [
   { x: FAB_MARGIN, y: FAB_MARGIN },
   { x: width - FAB_SIZE - FAB_MARGIN, y: FAB_MARGIN },
-  { x: FAB_MARGIN, y: height - FAB_SIZE - FAB_MARGIN - 20 },
-  { x: width - FAB_SIZE - FAB_MARGIN, y: height - FAB_SIZE - FAB_MARGIN - 20 },
+  { x: FAB_MARGIN, y: height - FAB_SIZE - BOTTOM_MARGIN },
+  { x: width - FAB_SIZE - FAB_MARGIN, y: height - FAB_SIZE - BOTTOM_MARGIN },
 ];
 
 const MENU = [
@@ -72,17 +74,20 @@ const MENU = [
     gradient: ['#e72e2eff', '#c93589ff'],
   },
   {
-    label: 'About Jharkhand High Court',
+    label: 'About',
     icon: 'information-circle-outline',
     iconType: 'Ionicons',
     route: 'About',
     gradient: ['#a7a7a7ff', '#000000ff'],
   },
-  
+  {
+    label: 'Theme',
+    icon: 'color-palette-outline',
+    iconType: 'Ionicons',
+    route: 'ThemeSettings',
+    gradient: ['#6a11cbff', '#25eefcff'],
+  },
 ];
-
-// Updated FAB gradient: light purple to light peach
-const FAB_GRADIENT = ["#8f8f8fff", "#2f2f2fff"];
 
 function getGradientIcon(menuItem) {
   const Icon = menuItem.iconType === 'FontAwesome' ? FontAwesome : Ionicons;
@@ -93,19 +98,24 @@ function getGradientIcon(menuItem) {
       end={{ x: 0.8, y: 1 }}
       style={styles.iconGradientBg}
     >
-      <Icon name={menuItem.icon} size={22} color="#fff" />
+      <Icon name={menuItem.icon} size={24} color="#fff" />
     </LinearGradient>
   );
 }
 
 export default function FloatingQuickMenu() {
+  const { colors, isDark } = useTheme();
   const navigation = useNavigation();
-  const navState = useNavigationState(state => state);
+  const navState = useNavigationState((state) => state);
+
+  const FAB_GRADIENT = isDark
+    ? ['#dd8dffff', '#000000']
+    : ['#dd8dffff', '#c1fffcff'];
 
   let currentRoute = '';
-  if (navState && navState.routes && navState.index != null) {
+  if (navState?.routes && navState.index != null) {
     let route = navState.routes[navState.index];
-    while (route && route.state && route.state.index != null) {
+    while (route?.state && route.state.index != null) {
       route = route.state.routes[route.state.index];
     }
     currentRoute = route?.name || '';
@@ -115,9 +125,21 @@ export default function FloatingQuickMenu() {
   const slideAnim = useRef(new Animated.Value(height)).current;
   const pan = useRef(new Animated.ValueXY(CORNERS[3])).current;
 
+  const [isNearTop, setIsNearTop] = useState(false);
+
+  useEffect(() => {
+    const listenerId = pan.y.addListener(({ value }) => {
+      setIsNearTop(value <= (FAB_MARGIN + 10));
+    });
+    return () => {
+      pan.y.removeListener(listenerId);
+    };
+  }, [pan]);
+
   const snapToNearestCorner = (x, y) => {
     let minDist = Infinity;
     let nearestCorner = CORNERS[3];
+
     for (const corner of CORNERS) {
       const dist = Math.pow(x - corner.x, 2) + Math.pow(y - corner.y, 2);
       if (dist < minDist) {
@@ -139,16 +161,12 @@ export default function FloatingQuickMenu() {
       onMoveShouldSetPanResponder: (evt, gestureState) =>
         !open && (Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy) > 2),
       onPanResponderGrant: () => {
-        pan.setOffset({
-          x: pan.x._value,
-          y: pan.y._value,
-        });
+        pan.setOffset({ x: pan.x._value, y: pan.y._value });
         pan.setValue({ x: 0, y: 0 });
       },
-      onPanResponderMove: Animated.event(
-        [null, { dx: pan.x, dy: pan.y }],
-        { useNativeDriver: false }
-      ),
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
+        useNativeDriver: false,
+      }),
       onPanResponderRelease: () => {
         pan.flattenOffset();
         snapToNearestCorner(pan.x._value, pan.y._value);
@@ -161,32 +179,28 @@ export default function FloatingQuickMenu() {
     Animated.spring(slideAnim, {
       toValue: 0,
       useNativeDriver: true,
-      speed: 13,
+      speed: 14,
       bounciness: 8,
       easing: Easing.out(Easing.exp),
     }).start();
   };
+
   const animateOut = (callback) => {
     Animated.timing(slideAnim, {
       toValue: height,
       duration: 210,
       useNativeDriver: true,
       easing: Easing.in(Easing.cubic),
-    }).start(() => {
-      if (callback) callback();
-    });
+    }).start(() => callback?.());
   };
 
-  // Haptic feedback before open
   const handleFABPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setOpen(true);
     setTimeout(() => animateIn(), 16);
   };
 
-  const handleClose = () => {
-    animateOut(() => setOpen(false));
-  };
+  const handleClose = () => animateOut(() => setOpen(false));
 
   const handlePress = (route) => {
     animateOut(() => {
@@ -197,36 +211,41 @@ export default function FloatingQuickMenu() {
 
   return (
     <>
-      <Modal
-        visible={open}
-        animationType="none"
-        transparent
-        statusBarTranslucent
-        onRequestClose={handleClose}
-      >
+      <Modal visible={open} transparent onRequestClose={handleClose}>
         <TouchableOpacity
-          style={styles.modalOverlay}
+          style={[
+            styles.modalOverlay,
+            { backgroundColor: isDark ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.16)' },
+          ]}
           activeOpacity={1}
           onPress={handleClose}
         />
         <Animated.View
           style={[
             styles.menuCard,
-            { transform: [{ translateY: slideAnim }] }
+            {
+              backgroundColor: colors.card,
+              transform: [{ translateY: slideAnim }],
+            },
           ]}
         >
           <View style={styles.menuHeader}>
-            <Text style={styles.menuTitle}>Quick Access</Text>
-            <TouchableOpacity onPress={handleClose} style={styles.closeBtn}>
-              <Ionicons name="close" size={28} color="#9CA3AF" />
+            <Text style={[styles.menuTitle, { color: colors.text }]}>Quick Access</Text>
+            <TouchableOpacity
+              onPress={handleClose}
+              style={[
+                styles.closeBtn,
+                { backgroundColor: isDark ? '#2a2a2a' : '#f6f6fa' },
+              ]}
+            >
+              <Ionicons name="close" size={20} color={colors.text} />
             </TouchableOpacity>
           </View>
           <ScrollView
             style={{ maxHeight: height * 0.48 }}
-            contentContainerStyle={{ paddingBottom: 4 }}
             showsVerticalScrollIndicator={false}
           >
-            {MENU.map(item => {
+            {MENU.map((item) => {
               const isActive = item.route === currentRoute;
               return (
                 <TouchableOpacity
@@ -240,7 +259,16 @@ export default function FloatingQuickMenu() {
                   <Text
                     style={[
                       styles.itemText,
-                      isActive && styles.activeText
+                      {
+                        color: isActive
+                          ? isDark
+                            ? '#64c420ff'
+                            : '#64c420ff'
+                          : isDark
+                          ? colors.text
+                          : '#000000',
+                      },
+                      isActive && styles.activeText,
                     ]}
                     numberOfLines={1}
                   >
@@ -248,8 +276,16 @@ export default function FloatingQuickMenu() {
                   </Text>
                   <Ionicons
                     name="chevron-forward"
-                    size={20}
-                    color={isActive ? "#4B3E2F" : "#aaa"}
+                    size={18}
+                    color={
+                      isActive
+                        ? isDark
+                          ? '#64c420ff'
+                          : '#000000'
+                        : isDark
+                        ? colors.text
+                        : '#000000'
+                    }
                     style={{ marginLeft: 8 }}
                   />
                 </TouchableOpacity>
@@ -258,14 +294,15 @@ export default function FloatingQuickMenu() {
           </ScrollView>
         </Animated.View>
       </Modal>
+
       {!open && (
         <Animated.View
           style={[
             styles.fab,
             {
               transform: [{ translateX: pan.x }, { translateY: pan.y }],
-              position: 'absolute',
-            }
+              marginTop: isNearTop ? 20 : 0, // Add extra margin top when near top
+            },
           ]}
           {...panResponder.panHandlers}
         >
@@ -278,9 +315,14 @@ export default function FloatingQuickMenu() {
               colors={FAB_GRADIENT}
               start={{ x: 0.15, y: 0.05 }}
               end={{ x: 0.85, y: 1 }}
-              style={{ flex: 1, alignItems: 'center', justifyContent: 'center', borderRadius: FAB_SIZE / 2 }}
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: FAB_SIZE / 2,
+              }}
             >
-              <Ionicons name="chevron-up-outline" size={30} color="#fff" />
+              <Ionicons name="menu" size={30} color="#fff" />
             </LinearGradient>
           </TouchableOpacity>
         </Animated.View>
@@ -294,35 +336,33 @@ const styles = StyleSheet.create({
     width: FAB_SIZE,
     height: FAB_SIZE,
     borderRadius: FAB_SIZE / 2,
-    backgroundColor: '#fff',
     zIndex: 60,
-    shadowColor: '#7F5DF0',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.23,
     shadowRadius: 5,
     elevation: 9,
     overflow: 'visible',
+    position: 'absolute',
   },
   iconGradientBg: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginRight: 14,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.16)',
   },
   menuCard: {
     position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
-    backgroundColor: '#fff',
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     minHeight: 100,
     paddingTop: 14,
     paddingHorizontal: 16,
@@ -336,13 +376,12 @@ const styles = StyleSheet.create({
   menuHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: 12,
     justifyContent: 'space-between',
   },
   menuTitle: {
     fontWeight: 'bold',
     fontSize: 20,
-    color: '#322d37',
   },
   closeBtn: {
     marginRight: 4,
@@ -358,17 +397,15 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingVertical: 10,
     paddingHorizontal: 6,
-    marginBottom: 2,
+    marginBottom: -2,
   },
   itemText: {
     flex: 1,
     fontSize: 17,
     marginLeft: 4,
-    color: '#000000ff',
     fontWeight: '500',
   },
   activeText: {
-    color: '#5a982eff',
     fontWeight: '700',
   },
 });
