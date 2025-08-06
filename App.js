@@ -12,6 +12,7 @@ import Escr from './screens/Escr';
 import Njdg from './screens/Njdg';
 import CaseNumber from './screens/CaseStatus/CaseNumber';
 import CaseFilling from './screens/CaseStatus/CaseFilling';
+import CaseAdvocateName from './screens/CaseStatus/CaseAdvocateName';
 import CaseStatus from './screens/CaseStatus/CaseStatus';
 import Toast from 'react-native-toast-message';
 import FloatingQuickMenu from './screens/Components/FloatingQuickMenu';
@@ -34,6 +35,7 @@ function MainStack() {
       <Stack.Screen name="CaseNumber" component={CaseNumber} />
       <Stack.Screen name="CaseFilling" component={CaseFilling} />
       <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="CaseAdvocateName" component={CaseAdvocateName} />
     </Stack.Navigator>
   );
 }

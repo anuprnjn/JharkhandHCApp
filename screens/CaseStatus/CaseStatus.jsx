@@ -20,7 +20,7 @@ const CaseStatus = () => {
       name: "Advocate Name",
       icon: "file-certificate-outline",
       gradient: ["#fa709a", "#fee140"],
-      route: "CaseType",
+      route: "CaseAdvocateName",
     },
     {
       name: "Case Number",
