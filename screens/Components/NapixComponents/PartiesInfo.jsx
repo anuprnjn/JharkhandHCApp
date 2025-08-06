@@ -10,16 +10,16 @@ const PartiesInfo = ({ caseInfo = {}, cnrData = {} }) => {
 
   return (
     <View style={styles.sectionCard}>
-      <Text style={styles.sectionTitle}>Parties</Text>
+      <Text style={styles.sectionTitle}>Parties Involved</Text>
       <View style={styles.partyContainer}>
         <Text style={styles.partyType}>Petitioner:</Text>
         <Text style={styles.partyName}>{caseInfo?.pet_name || cnrData?.pet_name || 'N/A'}</Text>
-        <Text style={{color:"#6b51ffff"}}>Advocate: {cnrData?.pet_adv || 'N/A'}</Text>
+        <Text style={{color:"#001effff"}}>Advocate: {cnrData?.pet_adv || 'N/A'}</Text>
       </View>
       <View style={styles.partyContainer}>
         <Text style={styles.partyType}>Respondent:</Text>
         <Text style={styles.partyName}>{caseInfo?.res_name || cnrData?.res_name || 'N/A'}</Text>
-        <Text style={{color:"#6b51ffff"}}>Advocate: {cnrData?.res_adv || 'N/A'}</Text>
+        <Text style={{color:"#001effff"}}>Advocate: {cnrData?.res_adv || 'N/A'}</Text>
       </View>
     </View>
   );

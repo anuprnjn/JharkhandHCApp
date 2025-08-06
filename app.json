@@ -1,31 +1,38 @@
 {
   "expo": {
     "name": "High Court of Jharkhand",
-    "slug": "high-court-of-jharkhand", 
+    "slug": "high-court-of-jharkhand",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/appicon/ios-light.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/bg_mask1.png",
-      "resizeMode": "contain", 
+      "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
       "icon": {
         "light": "./assets/appicon/ios-light.png",
-        "dark": "./assets/appicon/ios-dark.png", 
+        "dark": "./assets/appicon/ios-dark.png",
         "tinted": "./assets/appicon/ios-tinted.png"
+      },
+      "infoPlist": {
+        "NSDocumentsFolderUsageDescription": "This app needs access to save PDF files to your documents"
       }
     },
     "android": {
       "icon": "./assets/appicon/android-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/appicon/android-icon.png",
-        "monochromeImage": "./assets/appicon/android-icon.png", 
+        "monochromeImage": "./assets/appicon/android-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
       "package": "com.tushar2509.highcourtofjharkhand"
     },
     "web": {
@@ -42,6 +49,9 @@
     },
     "updates": {
       "url": "https://u.expo.dev/d5e9d7bb-f8f7-42a2-a417-d1b03dbe0f94"
-    }
+    },
+    "plugins": [
+      "expo-web-browser"
+    ]
   }
 }

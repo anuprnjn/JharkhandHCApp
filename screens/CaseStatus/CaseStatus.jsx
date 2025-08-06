@@ -20,12 +20,6 @@ const CaseStatus = () => {
 
   const SERVICES_DATA = [
     {
-      name: "Advocate Name",
-      icon: "file-certificate-outline",
-      gradient: ["#fa709a", "#fee140"],
-      route: "CaseType",
-    },
-    {
       name: "Case Number",
       icon: "file-document-outline",
       gradient: ["#2a8a4a", "#38f9d7"],
@@ -36,6 +30,12 @@ const CaseStatus = () => {
       icon: "file-document-edit-outline",
       gradient: ["#f093fb", "#f5576c"],
       route: "CaseFilling",
+    },
+    {
+      name: "Advocate Name",
+      icon: "file-certificate-outline",
+      gradient: ["#fa709a", "#fee140"],
+      route: "CaseType",
     },
     {
       name: "Party Name",

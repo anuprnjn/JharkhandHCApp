@@ -110,7 +110,7 @@ export default function FloatingQuickMenu() {
 
   const FAB_GRADIENT = isDark
     ? ['#dd8dffff', '#000000']
-    : ['#dd8dffff', '#c1fffcff'];
+    : ['#dd8dffff', '#db3861ff'];
 
   let currentRoute = '';
   if (navState?.routes && navState.index != null) {

@@ -19,6 +19,7 @@ import FloatingQuickMenu from './screens/Components/FloatingQuickMenu';
 import About from './screens/About';
 import ThemeSettings from './screens/ThemeSettings';
 import { ThemeProvider } from './Context/ThemeContext'; 
+import PDFViewer from './screens/Components/NapixComponents/PDFViewer';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,7 @@ function MainStack() {
       <Stack.Screen name="CaseFilling" component={CaseFilling} />
       <Stack.Screen name="About" component={About} />
       <Stack.Screen name="ThemeSettings" component={ThemeSettings} />
+      <Stack.Screen name="PDFViewer" component={PDFViewer} />
     </Stack.Navigator>
   );
 }

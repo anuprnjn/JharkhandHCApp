@@ -23,14 +23,14 @@ const BasicCaseInfo = ({ caseInfo = {}, cnrData = {}, formatDate }) => {
       <Text style={styles.sectionTitle}>Basic Case Information</Text>
       <View style={styles.infoRow}>
         <Text style={styles.infoLabel}>CINO:</Text>
-        <Text style={{color:"#6b51ffff",fontSize:17,fontWeight:"700"}}>{caseInfo?.cino || cnrData?.cino || 'N/A'}</Text>
+        <Text style={{color:"#001effff",fontSize:17,fontWeight:"700"}}>{caseInfo?.cino || cnrData?.cino || 'N/A'}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.infoLabel}>Case Type:</Text>
         <Text style={styles.infoValue}>{caseInfo?.type_name || cnrData?.type_name_reg || 'N/A'}</Text>
       </View>
       <View style={styles.infoRow}>
-        <Text style={styles.infoLabel}>Registration No:</Text>
+        <Text style={styles.infoLabel}>Case No:</Text>
         <Text style={styles.infoValue}>
           {caseInfo?.reg_no || cnrData?.reg_no || 'N/A'}/
           {caseInfo?.reg_year || cnrData?.reg_year || 'N/A'}

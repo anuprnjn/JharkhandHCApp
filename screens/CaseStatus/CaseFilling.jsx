@@ -24,6 +24,7 @@ import CaseDetailsNotFound from '../Components/NapixComponents/CaseDetailsNotFou
 import HeadingText from '../Components/HeadingText';
 
 const CaseFilling = () => {
+
   const { colors, isDark } = useTheme(); // 🌓 THEME: Access theme
   const [caseTypeOptions, setCaseTypeOptions] = useState([]);
   const [caseType, setCaseType] = useState('');
@@ -42,7 +43,7 @@ const CaseFilling = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
       const response = await fetch(
-        "http://192.168.29.27/jhc_app_api/fetchCaseTypeHcNapix.php",
+        "http://10.134.8.12/jhc_app_api/fetchCaseTypeHcNapix.php",
         {
           method: "GET",
           headers: {
@@ -94,7 +95,7 @@ const CaseFilling = () => {
   const searchCaseByNumber = async (searchData) => {
     try {
       setSearchLoading(true);
-      const response = await fetch("http://192.168.29.27/jhc_app_api/searchByfilingNoHcNapix.php", {
+      const response = await fetch("http://10.134.8.12/jhc_app_api/searchByfilingNoHcNapix.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -222,7 +223,8 @@ const CaseFilling = () => {
           subHeading="Search your case by filling number."
         />
         <Text style={[styles.label, { color: colors.text }]}>
-          High Court Case Types <Text style={{ color: 'red' }}>*</Text>
+          <Text>High Court Case Types </Text>
+          <Text style={{ color: 'red' }}>*</Text>
         </Text>
         <CustomDropdown
           data={caseTypeOptions}
