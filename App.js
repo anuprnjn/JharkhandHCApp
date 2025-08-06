@@ -47,15 +47,20 @@ export default function App() {
   const [routeName, setRouteName] = useState();
 
   return (
-    <ThemeProvider> {/* ✅ Wrap with ThemeProvider */}
+    <ThemeProvider>
       <NavigationContainer
         ref={navigationRef}
         onReady={() => {
-          setRouteName(navigationRef.current.getCurrentRoute().name);
+          const currentRoute = navigationRef.current?.getCurrentRoute();
+          if (currentRoute?.name) {
+            setRouteName(currentRoute.name);
+          }
         }}
         onStateChange={() => {
-          const currentRouteName = navigationRef.current.getCurrentRoute().name;
-          setRouteName(currentRouteName);
+          const currentRoute = navigationRef.current?.getCurrentRoute();
+          if (currentRoute?.name) {
+            setRouteName(currentRoute.name);
+          }
         }}
       >
         <MainStack />

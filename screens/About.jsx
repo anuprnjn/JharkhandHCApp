@@ -22,20 +22,23 @@ const About = () => {
 
           <Text style={[styles.paragraph, { color: colors.text }]}>
             High Court of Jharkhand was created after the State of Jharkhand was carved out of the State of Bihar on
-            <Text style={styles.highlight}> 15 November 2000</Text>, by the Bihar Reorganization Act, 2000.
+            <Text style={styles.highlight}> 15 November 2000</Text>
+            {', by the Bihar Reorganization Act, 2000.'}
           </Text>
 
           <Text style={[styles.paragraph, { color: colors.text }]}>
             Earlier, the Circuit Bench of the Patna High Court was established at Ranchi on
-            <Text style={styles.highlight}> 6 March 1972</Text> under Clause 36 of the Letters Patent of the Patna High Court.
-            The Circuit Bench became the Permanent Bench of the Patna High Court by the High Court at Patna
-            (Establishment of Permanent Bench at Ranchi) Act 1976 on <Text style={styles.highlight}>8 April 1976</Text>.
+            <Text style={styles.highlight}> 6 March 1972</Text>
+            {' under Clause 36 of the Letters Patent of the Patna High Court. The Circuit Bench became the Permanent Bench of the Patna High Court by the High Court at Patna (Establishment of Permanent Bench at Ranchi) Act 1976 on '}
+            <Text style={styles.highlight}>8 April 1976</Text>
+            {'.'}
           </Text>
 
           <Text style={[styles.paragraph, { color: colors.text }]}>
             This Permanent Bench finally became the High Court of Jharkhand on reorganization of Bihar State.
             The Court has jurisdiction over the State of Jharkhand and the seat of the Court is at
-            <Text style={styles.highlight}> Ranchi</Text>, the administrative capital of the State.
+            <Text style={styles.highlight}> Ranchi</Text>
+            {', the administrative capital of the State.'}
           </Text>
         </View>
 
