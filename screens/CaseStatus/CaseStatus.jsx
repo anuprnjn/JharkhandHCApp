@@ -4,17 +4,15 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import { useNavigation } from "@react-navigation/native";
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Navbar from "../Components/Navbar";
 import ServiceCard from "../Components/ServiceCard";
 import HeadingText from "../Components/HeadingText";
-import { useTheme } from "../../Context/ThemeContext"; // ⬅️ Import Theme Context
+import { useTheme } from "../../Context/ThemeContext"; 
 
 const CaseStatus = () => {
   const [favorites, setFavorites] = useState([]);
   const navigation = useNavigation();
-  const { colors, isDark } = useTheme(); // ⬅️ Use theme
+  const { colors, isDark } = useTheme(); 
 
   const FAVORITES_KEY = '@case_status_favorites';
 
@@ -35,7 +33,7 @@ const CaseStatus = () => {
       name: "Advocate Name",
       icon: "file-certificate-outline",
       gradient: ["#fa709a", "#fee140"],
-      route: "CaseType",
+      route: "AdvocateName",
     },
     {
       name: "Party Name",

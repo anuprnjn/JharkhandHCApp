@@ -163,9 +163,12 @@ const CaseNumber = () => {
     return (
       <View style={[styles.resultsContainer]}>
         <View style={styles.resultsHeader}>
-         <Text style={[styles.resultsTitle, { color: isDark ? colors.highlight : '#000000' }]}>
-          Case Details Found
-        </Text>
+         <View style={styles.titleContainer}>
+              <Ionicons name="checkmark-circle-outline" size={24} color={colors.highlight} />
+              <Text style={[styles.resultsTitle, { color: colors.text }]}>
+              Cases Details Found
+              </Text>
+          </View>
           <TouchableOpacity onPress={handleNewSearch} style={styles.newSearchButton}>
             <Ionicons name="add-circle-outline" size={20} color="#2a8a4a" />
             <Text style={styles.newSearchText}>New Search</Text>
@@ -251,7 +254,7 @@ const CaseNumber = () => {
           label="Case Year"
           value={caseYear}
           onChangeText={(text) => { setCaseYear(text); if (error) setError(false); }}
-          placeholder="Enter Case Year (e.g., 2025)"
+          placeholder="Enter Case Year"
           keyboardType="numeric"
           maxLength={4}
           req="true"
@@ -288,6 +291,12 @@ const styles = StyleSheet.create({
   formContainer: {
     padding: 20,
   },
+   titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 10,
+    },
   label: {
     fontSize: 18,
     fontWeight: '700',
@@ -320,7 +329,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('3%'),
   },
   resultsTitle: {
-    fontSize: wp('6%'),
+    fontSize: wp('5%'),
     fontWeight: 'bold',
     marginLeft: 4
   },

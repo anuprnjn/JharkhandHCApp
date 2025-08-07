@@ -25,7 +25,7 @@ import HeadingText from '../Components/HeadingText';
 
 const CaseFilling = () => {
 
-  const { colors, isDark } = useTheme(); // 🌓 THEME: Access theme
+  const { colors, isDark } = useTheme(); 
   const [caseTypeOptions, setCaseTypeOptions] = useState([]);
   const [caseType, setCaseType] = useState('');
   const [caseNumber, setCaseNumber] = useState('');
@@ -67,7 +67,7 @@ const CaseFilling = () => {
     } catch (error) {
       Alert.alert(
         "Loading Error",
-        "Failed to load case types. Please check your internet connection.",
+        "Failed to load case types. Napix not responding.",
         [
           { text: "Retry", onPress: () => fetchCaseTypes() },
           { text: "Cancel", style: "cancel" },
@@ -156,16 +156,18 @@ const CaseFilling = () => {
 
   const renderCaseDetails = () => {
     if (!searchResults) return null;
-    const regData = searchResults.registration_data;
+    const regData = searchResults.filing_data;
     const cnrData = searchResults.cnr_data;
     const caseInfo = regData?.casenos?.case1;
-
     return (
       <View style={[styles.resultsContainer]}>
         <View style={styles.resultsHeader}>
-         <Text style={[styles.resultsTitle, { color: isDark ? colors.highlight : '#000000' }]}>
-          Case Details Found
-        </Text>
+         <View style={styles.titleContainer}>
+            <Ionicons name="checkmark-circle-outline" size={24} color={colors.highlight} />
+            <Text style={[styles.resultsTitle, { color: colors.text }]}>
+            Cases Details Found
+          </Text>
+          </View>
           <TouchableOpacity onPress={handleNewSearch} style={styles.newSearchButton}>
             <Ionicons name="add-circle-outline" size={20} color="#2a8a4a" />
             <Text style={styles.newSearchText}>New Search</Text>
@@ -176,7 +178,7 @@ const CaseFilling = () => {
         <CourtInfo regData={regData} cnrData={cnrData} decodeHtml={decodeHtmlEntities} />
         <SubordinateCourtInfo cnrData={cnrData} />
         <HearingHistory history={cnrData?.historyofcasehearing} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
-        <OrdersSection interimOrders={cnrData?.interimorder} finalOrders={cnrData?.finalorder} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
+        <OrdersSection caseInfo={caseInfo} interimOrders={cnrData?.interimorder} finalOrders={cnrData?.finalorder} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
         <CategoryDetails category={cnrData?.category_details} />
       </View>
     );
@@ -242,16 +244,16 @@ const CaseFilling = () => {
           label="Filling Number"
           value={caseNumber}
           onChangeText={(text) => { setCaseNumber(text); if (error) setError(false); }}
-          placeholder="Filling Case Number"
+          placeholder="Enter Filling Number"
           keyboardType="numeric"
           req="true"
           editable={!searchLoading}
         />
         <CustomInput
-          label="Case Filling"
+          label="Filling Year"
           value={caseYear}
           onChangeText={(text) => { setCaseYear(text); if (error) setError(false); }}
-          placeholder="Enter Filling Year (e.g., 2025)"
+          placeholder="Enter Filling Year"
           keyboardType="numeric"
           maxLength={4}
           req="true"
@@ -288,6 +290,12 @@ const styles = StyleSheet.create({
   formContainer: {
     padding: 20,
   },
+   titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 10,
+    },
   label: {
     fontSize: 18,
     fontWeight: '700',

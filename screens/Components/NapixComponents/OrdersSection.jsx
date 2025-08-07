@@ -146,9 +146,9 @@ const OrdersSection = ({ caseInfo = {}, interimOrders = {}, finalOrders = {}, fo
                       disabled={orderLoading}
                     >
                       {orderLoading ? (
-                        <Ionicons name="hourglass-outline" size={16} color={colors.text} />
+                        <Ionicons name="hourglass-outline" size={18} color="white" />
                       ) : (
-                        <Ionicons name="eye-outline" size={16} color={colors.text} />
+                        <Ionicons name="eye-outline" size={18} color="white" />
                       )}
                       <Text style={styles.viewButtonText}>
                         {orderLoading ? 'Loading...' : 'View'}
@@ -172,7 +172,7 @@ const OrdersSection = ({ caseInfo = {}, interimOrders = {}, finalOrders = {}, fo
               onPress={() => setShowAllInterim(!showAllInterim)}
             >
               <Text style={styles.viewAllText}>
-                {showAllInterim ? 'Show Less' : `View All (${interimArr.length})`}
+                {showAllInterim ? 'Show Less' : `View All`}
               </Text>
             </TouchableOpacity>
           )}
@@ -197,11 +197,11 @@ const OrdersSection = ({ caseInfo = {}, interimOrders = {}, finalOrders = {}, fo
                       disabled={orderLoading}
                     >
                       {orderLoading ? (
-                        <Ionicons name="hourglass-outline" size={16} color={colors.text} />
+                        <Ionicons name="hourglass-outline" size={18} color="white" />
                       ) : (
-                        <Ionicons name="eye-outline" size={16} color={colors.text} />
+                        <Ionicons name="eye-outline" size={18} color="white" />
                       )}
-                      <Text style={[styles.viewButtonText, { color: colors.text }]}>
+                      <Text style={styles.viewButtonText}>
                         {orderLoading ? 'Loading...' : 'View'}
                       </Text>
                     </TouchableOpacity>
@@ -307,7 +307,7 @@ const getStyles = (colors, isDark) => StyleSheet.create({
   viewButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: isDark ? '#219b21ff' : '#e8f5e8',
+    backgroundColor: isDark ? '#219b21ff' : '#53319cff',
     paddingHorizontal: wp('2.5%'),
     paddingVertical: hp('0.5%'),
     borderRadius: 6,
@@ -321,7 +321,7 @@ const getStyles = (colors, isDark) => StyleSheet.create({
     opacity: 0.6,
   },
   viewButtonText: {
-    color: colors.text,
+    color: "#fff",
     fontWeight: '600',
     fontSize: wp('3.5%'),
     marginLeft: wp('1%'),

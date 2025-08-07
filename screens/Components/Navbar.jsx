@@ -4,22 +4,28 @@ import {
   StyleSheet,
   View,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import logoLight from '../../assets/images/HC_log.png';
 import logoDark from '../../assets/images/HC_white_logo.png';
 import { useTheme } from './../../Context/ThemeContext';
 
 const Navbar = () => {
-  const { isDark } = useTheme();
-
+  const { isDark, colors } = useTheme();
+  const styles = getStyles(colors, isDark);
+  const navigation = useNavigation();
+  const route = useRoute();
+  
   const lightLogoOpacity = useRef(new Animated.Value(isDark ? 0 : 1)).current;
   const darkLogoOpacity = useRef(new Animated.Value(isDark ? 1 : 0)).current;
-
+  
   useEffect(() => {
     Animated.parallel([
       Animated.timing(lightLogoOpacity, {
@@ -34,7 +40,19 @@ const Navbar = () => {
       }),
     ]).start();
   }, [isDark]);
-
+  
+  // Check if current screen should show back button
+  const shouldShowBackButton = route.name !== 'Home' && route.name !== 'Services';
+  
+  const handleBackPress = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      // Fallback to Home if no previous screen
+      navigation.navigate('Home');
+    }
+  };
+  
   // Indian flag corners, as before
   const flagGradientLight = [
     'rgba(255, 153, 51, 0.93)',
@@ -46,7 +64,7 @@ const Navbar = () => {
     '#121212',
     'rgba(54,245,37,0.91)',
   ];
-
+  
   // More intense bottom fade
   const bottomFadeLight = [
     'rgba(255, 255, 255, 1)', // very solid
@@ -56,11 +74,11 @@ const Navbar = () => {
   ];
   const bottomFadeDark = [
     'rgba(18, 18, 18, 1)',
-    'rgba(18, 18, 18, 1)', 
+    'rgba(18, 18, 18, 1)',     
     'rgba(18, 18, 18, 0.79)',
     'rgba(18, 18, 18, 0)'
   ];
-
+  
   return (
     <View style={styles.container}>
       <StatusBar
@@ -75,7 +93,7 @@ const Navbar = () => {
         end={{ x: 1, y: -0.5 }}
         style={styles.gradientBg}
       />
-
+       
       {/* More intense bottom fade overlay */}
       <LinearGradient
         colors={isDark ? bottomFadeDark : bottomFadeLight}
@@ -83,16 +101,37 @@ const Navbar = () => {
         end={{ x: -0.9, y: -0.10 }}
         style={styles.bottomFade}
       />
-
-      <View style={styles.logoWrapper}>
-        <Animated.Image
-          source={logoLight}
-          style={[styles.logo, { opacity: lightLogoOpacity }]}
-        />
-        <Animated.Image
-          source={logoDark}
-          style={[styles.logo, styles.logoOverlay, { opacity: darkLogoOpacity }]}
-        />
+       
+      <View style={styles.contentWrapper}>
+        {/* Back Button - Only show if not Home or Services */}
+        {shouldShowBackButton && (
+          <TouchableOpacity 
+            style={styles.backButton} 
+            onPress={handleBackPress}
+            activeOpacity={0.7}
+          >
+            <Ionicons 
+              name="arrow-back" 
+              size={22} 
+              color={isDark ? '#ffffff' : '#000000'} 
+            />
+          </TouchableOpacity>
+        )}
+        
+        {/* Logo */}
+        <View style={[
+          styles.logoWrapper, 
+          shouldShowBackButton ? styles.logoWithBackButton : styles.logoWithoutBackButton
+        ]}>
+          <Animated.Image
+            source={logoLight}
+            style={[styles.logo, { opacity: lightLogoOpacity }]}
+          />
+          <Animated.Image
+            source={logoDark}
+            style={[styles.logo, styles.logoOverlay, { opacity: darkLogoOpacity }]}
+          />
+        </View>
       </View>
     </View>
   );
@@ -100,10 +139,11 @@ const Navbar = () => {
 
 export default Navbar;
 
-const styles = StyleSheet.create({
+const getStyles = (colors, isDark) =>
+  StyleSheet.create({
   container: {
     width: wp('100%'),
-    height: hp('20%'),
+    height: hp('21%'),
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -120,17 +160,43 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    height: hp('18%'), // slightly taller for more intense fade
+    height: hp('18%'), 
     zIndex: 2,
+  },
+  contentWrapper: {
+    position: 'relative',
+    width: wp('100%'),
+    height: hp('18%'),
+    marginTop: hp('8%'),
+    zIndex: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: wp('5%'),
+  },
+  backButton: {
+    position: 'absolute',
+    left: wp('5%'),
+    top: '50%',
+    transform: [{ translateY: -12 }],
+    zIndex: 6,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: isDark ? colors.card : 'rgba(0, 0, 0, 0.1)',
   },
   logoWrapper: {
     position: 'relative',
     width: wp('65%'),
     height: hp('18%'),
-    marginTop: hp('8%'),
     zIndex: 4,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logoWithBackButton: {
+    marginLeft: wp("5%"), 
+  },
+  logoWithoutBackButton: {
+    marginLeft: 0, 
   },
   logo: {
     width: '100%',

@@ -13,14 +13,14 @@ const HeadingText = ({ icon, heading, subHeading }) => {
           <MaterialCommunityIcons
             name={icon}
             size={24}
-            color={isDark ? colors.highlight : '#53319cff'} 
-            style={{ marginRight: 10 }}
+            color={isDark ? colors.highlight : colors.highlight} 
+            style={{ marginRight: 5 }}
           />
         ) : null}
         <Text
           style={[
             styles.sectionTitle,
-            { color: isDark ? colors.highlight : '#53319cff' }
+            { color: isDark ? colors.highlight : colors.highlight }
           ]}
         >
           {heading}
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     marginTop: -8
   },
   sectionTitle: {
-    fontSize: 23,
+    fontSize: 22,
     fontWeight: '700',
     letterSpacing: 0.03,
     textAlign: 'center',

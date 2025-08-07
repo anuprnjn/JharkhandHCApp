@@ -23,7 +23,11 @@ const BasicCaseInfo = ({ caseInfo = {}, cnrData = {}, formatDate }) => {
       <Text style={styles.sectionTitle}>Basic Case Information</Text>
       <View style={styles.infoRow}>
         <Text style={styles.infoLabel}>CINO:</Text>
-        <Text style={{color:"#001effff",fontSize:17,fontWeight:"700"}}>{caseInfo?.cino || cnrData?.cino || 'N/A'}</Text>
+        <Text style={{ 
+          color: colors.highlight, 
+          fontWeight: 'bold', 
+          fontSize: 16 
+        }}>{caseInfo?.cino || cnrData?.cino || 'N/A'}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.infoLabel}>Case Type:</Text>

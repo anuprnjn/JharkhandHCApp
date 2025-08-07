@@ -70,9 +70,10 @@ export const ThemeProvider = ({ children }) => {
     text: isDark ? '#ffffff' : '#000000',
     card: isDark ? '#1e1e1e' : '#f5f5f5ff',
     border: isDark ? '#444' : '#ddd',
-    highlight: '#5aff62ff',
-    secText: '#dcdcdcff',
+    highlight: isDark ? '#5aff62ff' : "#53319cff",
+    secText: isDark ? '#dcdcdcff': '#585858ff',
     error:'#ff3b3bff',
+    info: isDark ? "#001effff" : "#001effff"
   };
 // 5aff62ff
 // 001effff

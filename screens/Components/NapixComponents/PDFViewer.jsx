@@ -15,6 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system';
 import * as IntentLauncher from 'expo-intent-launcher';
 import { useTheme } from '../../../Context/ThemeContext';
+import * as Sharing from 'expo-sharing';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const PDFViewer = ({ pdfData, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -80,6 +82,25 @@ const PDFViewer = ({ pdfData, onClose }) => {
     }
   };
 
+  const handleSharePDF = async () => {
+    try {
+      if (!(await Sharing.isAvailableAsync())) {
+        Alert.alert('Sharing not available on this device');
+        return;
+      }
+
+      if (pdfUri) {
+        await Sharing.shareAsync(pdfUri);
+      } else {
+        Alert.alert('PDF not ready for sharing');
+      }
+    } catch (error) {
+      console.error('Sharing error:', error);
+      Alert.alert('Error', 'Unable to share the PDF.');
+    }
+  };
+
+
   useEffect(() => {
     if (pdfData) createPDFFile();
   }, [pdfData]);
@@ -116,11 +137,18 @@ const PDFViewer = ({ pdfData, onClose }) => {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} translucent />
         <View style={styles.header}>
-          <TouchableOpacity onPress={onClose} style={styles.backButton}>
-            <Ionicons name="close" size={24} color={colors.text} />
-          </TouchableOpacity>
-          <Text style={styles.title}>{pdfData?.title || 'PDF Viewer'}{pdfData?.orders?.order_date}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity onPress={onClose} style={styles.backButton}>
+              <Ionicons name="close" size={26} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.title}>{pdfData?.title || 'PDF Viewer'}</Text>
           <View style={styles.placeholder} />
+          {Platform.OS === 'ios' && pdfUri && (
+            <TouchableOpacity onPress={handleSharePDF} style={styles.downloadButton}>
+              <Ionicons name="download-outline" size={26} color={colors.text} />
+            </TouchableOpacity>
+          )}
         </View>
         <WebView
           source={{ uri: pdfUri }}
@@ -174,18 +202,20 @@ const getStyles = (colors, isDark) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: 16,
+      paddingHorizontal: hp("2%"),
       paddingTop: Platform.OS === 'android' ? 40 : 20,
-      paddingBottom: 12,
+      paddingBottom: hp("2%"),
       backgroundColor: colors.cards,
+      marginTop: -hp("1%")
     },
     backButton: {
       padding: 8,
     },
     title: {
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: 'bold',
       color: colors.text,
+      marginLeft: wp("13%")
     },
     placeholder: {
       width: 32, // space to balance the close icon
@@ -231,5 +261,8 @@ const getStyles = (colors, isDark) =>
     retryButtonText: {
       color: '#fff',
       fontSize: 16,
+    },
+    downloadButton: {
+      padding: 8,
     },
   });

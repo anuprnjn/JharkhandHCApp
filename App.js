@@ -15,13 +15,18 @@ import Njdg from './screens/Njdg';
 import CaseNumber from './screens/CaseStatus/CaseNumber';
 import CaseFilling from './screens/CaseStatus/CaseFilling';
 import CaseStatus from './screens/CaseStatus/CaseStatus';
+import AdvocateName from './screens/CaseStatus/AdvocateName';
 import FloatingQuickMenu from './screens/Components/FloatingQuickMenu';
 import About from './screens/About';
 import ThemeSettings from './screens/ThemeSettings';
-import { ThemeProvider } from './Context/ThemeContext'; 
+import { ThemeProvider } from './Context/ThemeContext';
 import PDFViewer from './screens/Components/NapixComponents/PDFViewer';
+import CaseDetailsScreen from './screens/Components/NapixComponents/CaseDetailsScreen';
 
 const Stack = createStackNavigator();
+
+// Create navigationRef outside the component for global access
+export const navigationRef = React.createRef();
 
 function MainStack() {
   return (
@@ -38,6 +43,8 @@ function MainStack() {
       <Stack.Screen name="CaseNumber" component={CaseNumber} />
       <Stack.Screen name="CaseFilling" component={CaseFilling} />
       <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="AdvocateName" component={AdvocateName} />
+      <Stack.Screen name="CaseDetailsScreen" component={CaseDetailsScreen} />
       <Stack.Screen name="ThemeSettings" component={ThemeSettings} />
       <Stack.Screen name="PDFViewer" component={PDFViewer} />
     </Stack.Navigator>
@@ -45,7 +52,6 @@ function MainStack() {
 }
 
 export default function App() {
-  const navigationRef = useRef();
   const [routeName, setRouteName] = useState();
 
   return (

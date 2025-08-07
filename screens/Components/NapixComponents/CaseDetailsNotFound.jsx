@@ -27,43 +27,9 @@ const CaseDetailsNotFound = ({
         <View style={styles.messageContainer}>
           <Text style={[styles.errorTitle, { color: colors.text }]}>Oops! No Results Found</Text>
           <Text style={[styles.errorSubtitle, { color: colors.text }]}>
-            We couldn't find any case matching your search criteria.
-            The case might not exist or the details might be incorrect.
+            We couldn't find any data matching your search criteria.
+            The data might not exist or the details entered might be incorrect.
           </Text>
-        </View>
-
-        {/* Help Tips */}
-        <View
-          style={[
-            styles.tipsCard,
-            { backgroundColor: isDark ? '#4b430ebb' : '#fffbeb', borderLeftColor: '#f59e0b' },
-          ]}
-        >
-          <View style={styles.tipsHeader}>
-            <Ionicons name="bulb-outline" size={24} color="#f59e0b" />
-            <Text style={styles.tipsTitle}>Try These Tips</Text>
-          </View>
-
-          <View style={styles.tipsList}>
-            <View style={styles.tipItem}>
-              <View style={styles.tipBullet} />
-              <Text style={[styles.tipText, { color: isDark ? '#fbbf24' : '#78350f' }]}>
-                Verify the case number is correct
-              </Text>
-            </View>
-            <View style={styles.tipItem}>
-              <View style={styles.tipBullet} />
-              <Text style={[styles.tipText, { color: isDark ? '#fbbf24' : '#78350f' }]}>
-                Check if the case year matches
-              </Text>
-            </View>
-            <View style={styles.tipItem}>
-              <View style={styles.tipBullet} />
-              <Text style={[styles.tipText, { color: isDark ? '#fbbf24' : '#78350f' }]}>
-                Ensure correct case type is selected
-              </Text>
-            </View>
-          </View>
         </View>
 
         {/* Action Buttons */}
@@ -120,7 +86,7 @@ const styles = StyleSheet.create({
   messageContainer: {
     alignItems: 'center',
     marginBottom: hp('4%'),
-    marginTop: -50,
+    marginTop: -100,
   },
   errorTitle: {
     fontSize: wp('7%'),
