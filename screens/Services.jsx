@@ -17,14 +17,19 @@ import { useTheme } from "../Context/ThemeContext";
 const FAVORITES_KEY = 'favorites';
 
 const SERVICES_DATA = [
-  { name: "Case Status", icon: "scale-balance", gradient: ["#667eea", "#764ba2"], route: 'CaseStatus'},
-  { name: "Cause List", icon: "file-document-multiple", gradient: ["#f093fb", "#f5576c"], route: 'CauseList'},
-  { name: "Orders & Judgement", icon: "gavel", gradient: ["#4facfe", "#00f2fe"], route: 'OrdersJudgement'},
-  { name: "eFilings", icon: "cloud-upload", gradient: ["#2a8a4aff", "#38f9d7"], route: 'EFiling'},
-  { name: "Display Board", icon: "monitor-dashboard", gradient: ["#fa709a", "#fee140"], route: 'DisplayBoard'},
-  { name: "Certified Copy", icon: "certificate", gradient: ["#efc488ff", "#f88c68ff"], route: 'CertifiedCopy'},
-  { name: "Calendar", icon: "calendar-month", gradient: ["#d7686bff", "#fecfef"], route: 'Calendar'},
+  { name: "Case Status", icon: "scale-balance", gradient: ["#667eea", "#764ba2"], route: 'CaseStatus' },
+  { name: "Cause List", icon: "file-document-multiple", gradient: ["#f093fb", "#f5576c"], route: 'CauseList' },
+  { name: "Orders & Judgement", icon: "gavel", gradient: ["#4facfe", "#00f2fe"], route: 'OdersAndJudgementIndex' },
+  { name: "Display Board", icon: "monitor-dashboard", gradient: ["#fa709a", "#fee140"], route: 'DisplayBoard' },
+  { name: "Certified Copy", icon: "certificate", gradient: ["#efc488ff", "#f88c68ff"], route: 'CertifiedCopy' },
+  { name: "eFilings", icon: "cloud-upload", gradient: ["#2a8a4aff", "#38f9d7"], route: 'E-Fillings' },
+  { name: "Telephone Directory", icon: "phone", gradient: ["#43cea2", "#185a9d"], route: 'TelephoneDirectory' },
+  { name: "Neutral Citation", icon: "file-find", gradient: ["#f14671ff", "#d77ce3ff"], route: 'NeutralCitation' },
+  { name: "Roster", icon: "account-group", gradient: ["#ff9966", "#ff5e62"], route: 'Roster' },
+  { name: "Status of Filing & Copying", icon: "file-document-edit", gradient: ["#36D1DC", "#5B86E5"], route: 'FilingCopyStatus' },
+  { name: "Calendar", icon: "calendar-month", gradient: ["#d7686bff", "#fecfef"], route: 'Calendar' },
 ];
+
 
 const Services = () => {
   const [favorites, setFavorites] = useState([]);

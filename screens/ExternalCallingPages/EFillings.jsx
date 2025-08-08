@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import Navbar from './Components/Navbar';
+import Navbar from '../Components/Navbar';
+import HeadingText from '../Components/HeadingText';
 
-const EPayment = () => {
+const EFillings = () => {
  
   const [loading, setLoading] = useState(true);
 
@@ -22,10 +23,12 @@ const EPayment = () => {
 
       <View style={styles.webViewContainer}>
         <WebView
-          source={{ uri: 'https://pay.ecourts.gov.in/epay/' }}
+          source={{ uri: 'https://filing.ecourts.gov.in/pdedev/' }}
           style={styles.webView}
           onLoadStart={() => setLoading(true)}   
-          onLoad={() => setLoading(false)}      
+          onLoad={() => setLoading(false)}  
+          showsVerticalScrollIndicator={false}  
+          showsHorizontalScrollIndicator={false}     
         />
       </View>
     </View>
@@ -57,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EPayment;
+export default EFillings;

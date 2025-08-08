@@ -18,7 +18,7 @@ import logoDark from '../../assets/images/HC_white_logo.png';
 import { useTheme } from './../../Context/ThemeContext';
 
 const Navbar = () => {
-  const { isDark, colors } = useTheme();
+  const { isDark, colors, setThemeMode } = useTheme();
   const styles = getStyles(colors, isDark);
   const navigation = useNavigation();
   const route = useRoute();
@@ -42,7 +42,8 @@ const Navbar = () => {
   }, [isDark]);
   
   // Check if current screen should show back button
-  const shouldShowBackButton = route.name !== 'Home' && route.name !== 'Services';
+  const isServicesPage = route.name === 'Services';
+  const shouldShowBackButton = route.name !== 'Home' && !isServicesPage;
   
   const handleBackPress = () => {
     if (navigation.canGoBack()) {
@@ -103,25 +104,39 @@ const Navbar = () => {
       />
        
       <View style={styles.contentWrapper}>
-        {/* Back Button - Only show if not Home or Services */}
-        {shouldShowBackButton && (
+        {/* If Services page → show theme toggle, else back button */}
+        {isServicesPage ? (
           <TouchableOpacity 
             style={styles.backButton} 
-            onPress={handleBackPress}
+            onPress={() => setThemeMode(isDark ? 'light' : 'dark')}
             activeOpacity={0.7}
           >
             <Ionicons 
-              name="arrow-back" 
-              size={22} 
+              name={isDark ? 'moon-outline' : 'sunny-outline'} 
+              size={24} 
               color={isDark ? '#ffffff' : '#000000'} 
             />
           </TouchableOpacity>
+        ) : (
+          shouldShowBackButton && (
+            <TouchableOpacity 
+              style={styles.backButton} 
+              onPress={handleBackPress}
+              activeOpacity={0.7}
+            >
+              <Ionicons 
+                name="arrow-back" 
+                size={24} 
+                color={isDark ? '#ffffff' : '#000000'} 
+              />
+            </TouchableOpacity>
+          )
         )}
         
         {/* Logo */}
         <View style={[
           styles.logoWrapper, 
-          shouldShowBackButton ? styles.logoWithBackButton : styles.logoWithoutBackButton
+          (shouldShowBackButton || isServicesPage) ? styles.logoWithBackButton : styles.logoWithoutBackButton
         ]}>
           <Animated.Image
             source={logoLight}
@@ -182,11 +197,11 @@ const getStyles = (colors, isDark) =>
     zIndex: 6,
     padding: 8,
     borderRadius: 20,
-    backgroundColor: isDark ? colors.card : 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: isDark ? colors.card : 'rgba(24, 24, 24, 0.04)',
   },
   logoWrapper: {
     position: 'relative',
-    width: wp('65%'),
+    width: wp('64%'),
     height: hp('18%'),
     zIndex: 4,
     justifyContent: 'center',

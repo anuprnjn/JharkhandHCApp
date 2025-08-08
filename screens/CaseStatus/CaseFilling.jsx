@@ -8,9 +8,8 @@ import CustomDropdown from '../Components/CustomDropdown';
 import Button from '../Components/Button';
 import CustomInput from '../Components/CustomInput';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
-// 🌓 THEME: Import useTheme hook
 import { useTheme } from '../../Context/ThemeContext';
+import { API_BASE_URL } from '@env';
 
 // Modular Sections
 import BasicCaseInfo from '../Components/NapixComponents/BasicCaseInfo';
@@ -43,7 +42,7 @@ const CaseFilling = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
       const response = await fetch(
-        "http://10.134.8.12/jhc_app_api/fetchCaseTypeHcNapix.php",
+        `${API_BASE_URL}/fetchCaseTypeHcNapix.php`,
         {
           method: "GET",
           headers: {
@@ -95,7 +94,7 @@ const CaseFilling = () => {
   const searchCaseByNumber = async (searchData) => {
     try {
       setSearchLoading(true);
-      const response = await fetch("http://10.134.8.12/jhc_app_api/searchByfilingNoHcNapix.php", {
+      const response = await fetch(`${API_BASE_URL}/searchByfilingNoHcNapix.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -328,7 +327,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('3%'),
   },
   resultsTitle: {
-    fontSize: wp('6%'),
+    fontSize: wp('5%'),
     fontWeight: 'bold',
     marginLeft: 4
   },

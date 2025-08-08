@@ -12,22 +12,18 @@ import { useTheme } from '../../Context/ThemeContext';
 import { API_BASE_URL } from '@env';
 
 // Modular Sections
-import BasicCaseInfo from '../Components/NapixComponents/BasicCaseInfo';
-import PartiesInfo from '../Components/NapixComponents/PartiesInfo';
-import CourtInfo from '../Components/NapixComponents/CourtInfo';
-import SubordinateCourtInfo from '../Components/NapixComponents/SubordinateCourtInfo';
-import HearingHistory from '../Components/NapixComponents/HearingHistory';
+
 import OrdersSection from '../Components/NapixComponents/OrdersSection';
-import CategoryDetails from '../Components/NapixComponents/CategoryDetails';
 import CaseDetailsNotFound from '../Components/NapixComponents/CaseDetailsNotFound';
 import HeadingText from '../Components/HeadingText';
+import BasicCaseInfo from '../Components/NapixComponents/BasicCaseInfo';
 
-const CaseNumber = () => {
+const OrderCaseNumber = () => {
 
   const { colors, isDark } = useTheme(); 
   const [caseTypeOptions, setCaseTypeOptions] = useState([]);
   const [caseType, setCaseType] = useState('');
-  const [caseNumber, setCaseNumber] = useState('');
+  const [OrderCaseNumber, setOrderCaseNumber] = useState('');
   const [caseYear, setCaseYear] = useState('');
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -81,13 +77,13 @@ const CaseNumber = () => {
   const handleCaseTypeSelect = (item) => { setCaseType(item.value); if (error) setError(false); };
 
   const handleSearchCase = async () => {
-    if (!caseType || !caseNumber || !caseYear) { setError(true); return; }
+    if (!caseType || !OrderCaseNumber || !caseYear) { setError(true); return; }
     if (caseYear.length !== 4 || isNaN(caseYear)) {
       Alert.alert('Validation Error', 'Please enter a valid 4-digit year');
       return;
     }
     setError(false); setShowResults(false); setSearchResults(null); setShowNotFound(false);
-    const searchData = { case_type: caseType, reg_no: caseNumber, reg_year: caseYear };
+    const searchData = { case_type: caseType, reg_no: OrderCaseNumber, reg_year: caseYear };
     await searchCaseByNumber(searchData);
   };
 
@@ -124,7 +120,7 @@ const CaseNumber = () => {
     setSearchResults(null);
     setShowNotFound(false);
     setCaseType('');
-    setCaseNumber('');
+    setOrderCaseNumber('');
     setCaseYear('');
     setError(false);
   };
@@ -165,7 +161,7 @@ const CaseNumber = () => {
          <View style={styles.titleContainer}>
               <Ionicons name="checkmark-circle-outline" size={24} color={colors.highlight} />
               <Text style={[styles.resultsTitle, { color: colors.text }]}>
-              Cases Details Found
+              Order Details Found
               </Text>
           </View>
           <TouchableOpacity onPress={handleNewSearch} style={styles.newSearchButton}>
@@ -174,12 +170,7 @@ const CaseNumber = () => {
           </TouchableOpacity>
         </View>
         <BasicCaseInfo caseInfo={caseInfo} cnrData={cnrData} formatDate={formatDate} />
-        <PartiesInfo caseInfo={caseInfo} cnrData={cnrData} />
-        <CourtInfo regData={regData} cnrData={cnrData} decodeHtml={decodeHtmlEntities} />
-        <SubordinateCourtInfo cnrData={cnrData} />
-        <HearingHistory history={cnrData?.historyofcasehearing} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
         <OrdersSection caseInfo={caseInfo} interimOrders={cnrData?.interimorder} finalOrders={cnrData?.finalorder} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
-        <CategoryDetails category={cnrData?.category_details} />
       </View>
     );
   };
@@ -190,7 +181,7 @@ const CaseNumber = () => {
         <Navbar />
         <CaseDetailsNotFound
           caseType={caseType}
-          caseNumber={caseNumber}
+          OrderCaseNumber={OrderCaseNumber}
           caseYear={caseYear}
           caseTypeOptions={caseTypeOptions}
           onNewSearch={handleNewSearch}
@@ -221,8 +212,8 @@ const CaseNumber = () => {
         <HeadingText
           icon="magnify"
           iconType="material-community"
-          heading="Search case by case Number"
-          subHeading="Search your case by case number."
+          heading="Search Order by case Number"
+          subHeading="Search your case orders by case number."
         />
         <Text style={[styles.label, { color: colors.text }]}>
           <Text>High Court Case Types </Text>
@@ -242,8 +233,8 @@ const CaseNumber = () => {
         />
         <CustomInput
           label="Case Number"
-          value={caseNumber}
-          onChangeText={(text) => { setCaseNumber(text); if (error) setError(false); }}
+          value={OrderCaseNumber}
+          onChangeText={(text) => { setOrderCaseNumber(text); if (error) setError(false); }}
           placeholder="Enter Case Number"
           keyboardType="numeric"
           req="true"
@@ -266,13 +257,13 @@ const CaseNumber = () => {
         )}
         <Button
           onPress={handleSearchCase}
-          text={searchLoading ? 'Searching...' : 'Search Case'}
+          text={searchLoading ? 'Searching...' : 'Search Order'}
           disabled={loading || searchLoading}
         />
         {searchLoading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.highlight} />
-            <Text style={[styles.loadingText, { color: colors.text }]}>Searching for case...</Text>
+            <Text style={[styles.loadingText, { color: colors.text }]}>Searching for order...</Text>
           </View>
         )}
       </ScrollView>
@@ -347,4 +338,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CaseNumber;
+export default OrderCaseNumber;

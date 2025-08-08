@@ -13,16 +13,11 @@ import { API_BASE_URL } from '@env';
 
 // Modular Sections
 import BasicCaseInfo from '../Components/NapixComponents/BasicCaseInfo';
-import PartiesInfo from '../Components/NapixComponents/PartiesInfo';
-import CourtInfo from '../Components/NapixComponents/CourtInfo';
-import SubordinateCourtInfo from '../Components/NapixComponents/SubordinateCourtInfo';
-import HearingHistory from '../Components/NapixComponents/HearingHistory';
 import OrdersSection from '../Components/NapixComponents/OrdersSection';
-import CategoryDetails from '../Components/NapixComponents/CategoryDetails';
 import CaseDetailsNotFound from '../Components/NapixComponents/CaseDetailsNotFound';
 import HeadingText from '../Components/HeadingText';
 
-const CaseNumber = () => {
+const OrderFillingNumber = () => {
 
   const { colors, isDark } = useTheme(); 
   const [caseTypeOptions, setCaseTypeOptions] = useState([]);
@@ -66,7 +61,7 @@ const CaseNumber = () => {
     } catch (error) {
       Alert.alert(
         "Loading Error",
-        "Failed to load case types. Please check your internet connection.",
+        "Failed to load case types. Napix not responding.",
         [
           { text: "Retry", onPress: () => fetchCaseTypes() },
           { text: "Cancel", style: "cancel" },
@@ -87,14 +82,14 @@ const CaseNumber = () => {
       return;
     }
     setError(false); setShowResults(false); setSearchResults(null); setShowNotFound(false);
-    const searchData = { case_type: caseType, reg_no: caseNumber, reg_year: caseYear };
+    const searchData = { case_type: caseType, fil_no: caseNumber, fil_year: caseYear };
     await searchCaseByNumber(searchData);
   };
 
   const searchCaseByNumber = async (searchData) => {
     try {
       setSearchLoading(true);
-      const response = await fetch(`${API_BASE_URL}/searchByCaseNoHcNapix.php`, {
+      const response = await fetch(`${API_BASE_URL}/searchByfilingNoHcNapix.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -155,18 +150,17 @@ const CaseNumber = () => {
 
   const renderCaseDetails = () => {
     if (!searchResults) return null;
-    const regData = searchResults.registration_data;
+    const regData = searchResults.filing_data;
     const cnrData = searchResults.cnr_data;
     const caseInfo = regData?.casenos?.case1;
-
     return (
       <View style={[styles.resultsContainer]}>
         <View style={styles.resultsHeader}>
          <View style={styles.titleContainer}>
-              <Ionicons name="checkmark-circle-outline" size={24} color={colors.highlight} />
-              <Text style={[styles.resultsTitle, { color: colors.text }]}>
-              Cases Details Found
-              </Text>
+            <Ionicons name="checkmark-circle-outline" size={24} color={colors.highlight} />
+            <Text style={[styles.resultsTitle, { color: colors.text }]}>
+            Order Details Found
+          </Text>
           </View>
           <TouchableOpacity onPress={handleNewSearch} style={styles.newSearchButton}>
             <Ionicons name="add-circle-outline" size={20} color="#2a8a4a" />
@@ -174,12 +168,7 @@ const CaseNumber = () => {
           </TouchableOpacity>
         </View>
         <BasicCaseInfo caseInfo={caseInfo} cnrData={cnrData} formatDate={formatDate} />
-        <PartiesInfo caseInfo={caseInfo} cnrData={cnrData} />
-        <CourtInfo regData={regData} cnrData={cnrData} decodeHtml={decodeHtmlEntities} />
-        <SubordinateCourtInfo cnrData={cnrData} />
-        <HearingHistory history={cnrData?.historyofcasehearing} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
         <OrdersSection caseInfo={caseInfo} interimOrders={cnrData?.interimorder} finalOrders={cnrData?.finalorder} formatDate={formatDate} decodeHtml={decodeHtmlEntities} />
-        <CategoryDetails category={cnrData?.category_details} />
       </View>
     );
   };
@@ -221,8 +210,8 @@ const CaseNumber = () => {
         <HeadingText
           icon="magnify"
           iconType="material-community"
-          heading="Search case by case Number"
-          subHeading="Search your case by case number."
+          heading="Search Order by Filling Number"
+          subHeading="Search your Orders by filling number."
         />
         <Text style={[styles.label, { color: colors.text }]}>
           <Text>High Court Case Types </Text>
@@ -241,19 +230,19 @@ const CaseNumber = () => {
           style={styles.dropdown}
         />
         <CustomInput
-          label="Case Number"
+          label="Filling Number"
           value={caseNumber}
           onChangeText={(text) => { setCaseNumber(text); if (error) setError(false); }}
-          placeholder="Enter Case Number"
+          placeholder="Enter Filling Number"
           keyboardType="numeric"
           req="true"
           editable={!searchLoading}
         />
         <CustomInput
-          label="Case Year"
+          label="Filling Year"
           value={caseYear}
           onChangeText={(text) => { setCaseYear(text); if (error) setError(false); }}
-          placeholder="Enter Case Year"
+          placeholder="Enter Filling Year"
           keyboardType="numeric"
           maxLength={4}
           req="true"
@@ -266,13 +255,13 @@ const CaseNumber = () => {
         )}
         <Button
           onPress={handleSearchCase}
-          text={searchLoading ? 'Searching...' : 'Search Case'}
+          text={searchLoading ? 'Searching...' : 'Search Order'}
           disabled={loading || searchLoading}
         />
         {searchLoading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.highlight} />
-            <Text style={[styles.loadingText, { color: colors.text }]}>Searching for case...</Text>
+            <Text style={[styles.loadingText, { color: colors.text }]}>Searching for order...</Text>
           </View>
         )}
       </ScrollView>
@@ -347,4 +336,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CaseNumber;
+export default OrderFillingNumber;

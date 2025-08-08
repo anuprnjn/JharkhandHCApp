@@ -30,12 +30,9 @@ const BasicCaseInfo = ({ caseInfo = {}, cnrData = {}, formatDate }) => {
         }}>{caseInfo?.cino || cnrData?.cino || 'N/A'}</Text>
       </View>
       <View style={styles.infoRow}>
-        <Text style={styles.infoLabel}>Case Type:</Text>
-        <Text style={styles.infoValue}>{caseInfo?.type_name || cnrData?.type_name_reg || 'N/A'}</Text>
-      </View>
-      <View style={styles.infoRow}>
         <Text style={styles.infoLabel}>Case No:</Text>
         <Text style={styles.infoValue}>
+          {caseInfo?.type_name || cnrData?.type_name_reg || 'N/A'}/
           {caseInfo?.reg_no || cnrData?.reg_no || 'N/A'}/
           {caseInfo?.reg_year || cnrData?.reg_year || 'N/A'}
         </Text>

@@ -11,6 +11,7 @@ import { useTheme } from '../../Context/ThemeContext';
 import AdvocateCaseResults from '../Components/NapixComponents/AdvocateCaseResults';
 import HeadingText from '../Components/HeadingText';
 import CaseDetailsNotFound from '../Components/NapixComponents/CaseDetailsNotFound';
+import { API_BASE_URL } from '@env';
 
 const AdvocateName = () => {
   const { colors, isDark } = useTheme();
@@ -50,7 +51,7 @@ const AdvocateName = () => {
   const searchCaseByAdvocate = async (searchData) => {
     try {
       setSearchLoading(true);
-      const response = await fetch("http://10.134.8.12/jhc_app_api/searchAdvocateHcNapix.php", {
+      const response = await fetch(`${API_BASE_URL}/searchAdvocateHcNapix.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -200,7 +201,7 @@ const AdvocateName = () => {
         <HeadingText
           icon="account-search"
           iconType="material-community"
-          heading="Search Case by advocate name"
+          heading="Search Case by Advocate name"
           subHeading="Search cases by advocate name, year and status."
         />
 

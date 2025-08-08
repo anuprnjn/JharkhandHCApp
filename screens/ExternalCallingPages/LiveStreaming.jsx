@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Text, ActivityIndicator, StyleSheet, Linking } from "react-native";
-import Navbar from "./Components/Navbar";
+import Navbar from "../Components/Navbar";
 
 const YT_URL = 'https://www.youtube.com/@jharkhandhighccourtranchi';
 

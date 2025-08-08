@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import Navbar from '../Components/Navbar';
+import HeadingText from '../Components/HeadingText';
 
-const ECourtFee = () => {
+const Njdg = () => {
  
   const [loading, setLoading] = useState(true);
 
   return (
+    <>
     <View style={styles.container}>
+    <Navbar/>
       {loading && (
         <ActivityIndicator 
           size="large" 
@@ -18,14 +22,23 @@ const ECourtFee = () => {
       )}
 
       <View style={styles.webViewContainer}>
+        <HeadingText
+          icon="desktop-mac-dashboard"
+          iconType="material-community"
+          heading="Welcome to NJDG"
+          subHeading="Welcome to National Judicial data Grid."
+        />
         <WebView
-          source={{ uri: 'https://www.shcilestamp.com/estamp_CFS_home.html' }}
+          source={{ uri: 'https://njdg.ecourts.gov.in/njdg_v3/' }}
           style={styles.webView}
           onLoadStart={() => setLoading(true)}   
-          onLoad={() => setLoading(false)}      
+          onLoad={() => setLoading(false)}   
+          showsVerticalScrollIndicator={false}  
+          showsHorizontalScrollIndicator={false}    
         />
       </View>
     </View>
+    </>
   );
 };
 
@@ -38,6 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: hp('2%'),
     backgroundColor: '#FFFFFF',
+    padding: wp('2%'),
   },
   webView: {
     flex: 1,
@@ -52,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ECourtFee;
+export default Njdg;

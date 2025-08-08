@@ -11,8 +11,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useTheme } from '../../../Context/ThemeContext';
 import Navbar from '../Navbar';
+import { API_BASE_URL } from '@env';
 
-const CaseDetailsScreen = ({ route, navigation }) => {
+
+const ADVCaseDetailsScreen = ({ route, navigation }) => {
   const { colors, isDark } = useTheme();
   const { caseData } = route.params;
   
@@ -26,7 +28,7 @@ const CaseDetailsScreen = ({ route, navigation }) => {
   const fetchCaseDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://10.134.8.12/jhc_app_api/searchByCNRNapix.php", {
+      const response = await fetch(`${API_BASE_URL}/searchByCNRNapix.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -595,4 +597,4 @@ nextDate: {
 
 });
 
-export default CaseDetailsScreen;
+export default ADVCaseDetailsScreen;

@@ -80,13 +80,6 @@ const MENU = [
     route: 'About',
     gradient: ['#a7a7a7ff', '#000000ff'],
   },
-  {
-    label: 'Theme',
-    icon: 'color-palette-outline',
-    iconType: 'Ionicons',
-    route: 'ThemeSettings',
-    gradient: ['#6a11cbff', '#25eefcff'],
-  },
 ];
 
 function getGradientIcon(menuItem) {

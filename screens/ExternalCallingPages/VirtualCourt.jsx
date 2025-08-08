@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import Navbar from './Components/Navbar';
+import Navbar from '../Components/Navbar';
+import HeadingText from '../Components/HeadingText';
 
-const Escr = () => {
+const VirtualCourt = () => {
  
   const [loading, setLoading] = useState(true);
 
@@ -21,11 +22,19 @@ const Escr = () => {
       )}
 
       <View style={styles.webViewContainer}>
+        <HeadingText
+          icon="home-analytics"
+          iconType="material-community"
+          heading="Welcome to Virtual Court"
+          subHeading="Select the department to proceed with."
+        />
         <WebView
-          source={{ uri: 'https://judgments.ecourts.gov.in/pdfsearch/?app_token=' }}
+          source={{ uri: 'https://vcourts.gov.in/virtualcourt/' }}
           style={styles.webView}
           onLoadStart={() => setLoading(true)}   
           onLoad={() => setLoading(false)}      
+          showsVerticalScrollIndicator={false}  
+          showsHorizontalScrollIndicator={false} 
         />
       </View>
     </View>
@@ -57,4 +66,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Escr;
+export default VirtualCourt;
+
+
