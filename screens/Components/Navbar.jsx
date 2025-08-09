@@ -114,7 +114,7 @@ const Navbar = () => {
             <Ionicons 
               name={isDark ? 'moon-outline' : 'sunny-outline'} 
               size={24} 
-              color={isDark ? '#ffffff' : '#000000'} 
+              color={isDark ? '#ffffff' : colors.secText} 
             />
           </TouchableOpacity>
         ) : (
@@ -201,7 +201,7 @@ const getStyles = (colors, isDark) =>
   },
   logoWrapper: {
     position: 'relative',
-    width: wp('64%'),
+    width: wp('62%'),
     height: hp('18%'),
     zIndex: 4,
     justifyContent: 'center',

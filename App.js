@@ -33,6 +33,7 @@ import OrderFillingNumber from './screens/OrdersAndJudgement/OrderFillingNumber'
 import HighCourtDPBoard from './screens/ExternalCallingPages/HighCourtDPBoard';
 import DistrictCourtDPBoard from './screens/DisplayBoard/DistrictCourtDPBoard';
 import WebViewComponent from './screens/Components/WebViewComponent';
+import CalendarPage from './screens/CalendarPage';
 
 const Stack = createStackNavigator();
 
@@ -70,6 +71,7 @@ function MainStack() {
       <Stack.Screen name="HighCourtDPBoard" component={HighCourtDPBoard} />
       <Stack.Screen name="DistrictCourtDPBoard" component={DistrictCourtDPBoard} />
       <Stack.Screen name="WebViewComponent" component={WebViewComponent} />
+      <Stack.Screen name="CalendarPage" component={CalendarPage} />
     </Stack.Navigator>
   );
 }

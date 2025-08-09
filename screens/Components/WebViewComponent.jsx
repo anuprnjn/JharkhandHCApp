@@ -4,9 +4,12 @@ import { WebView } from 'react-native-webview';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Navbar from './Navbar';
 import HeadingText from './HeadingText';
+import { useTheme } from '../../Context/ThemeContext';
 
 const WebViewComponent = ({ route }) => { 
   const { district_name, title } = route.params; 
+  const { colors, isDark } = useTheme();
+  const styles = getStyles(colors, isDark);
  
   const [loading, setLoading] = useState(true);
   return (
@@ -23,7 +26,7 @@ const WebViewComponent = ({ route }) => {
 
       <View style={styles.webViewContainer}>
         <HeadingText
-          icon="monitor-multiple"
+          icon=""
           iconType="material-community"
           heading={`Display board of ${district_name.charAt(0).toUpperCase() + district_name.slice(1)}`}
           subHeading={`Welcome to display board of ${district_name}.`}
@@ -48,15 +51,16 @@ const WebViewComponent = ({ route }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors, isDark) =>
+  StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background ,
   },
   webViewContainer: {
     flex: 1,
     marginTop: hp('2%'),
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background,
     padding: wp('2%'),
   },
   webView: {

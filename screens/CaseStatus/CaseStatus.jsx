@@ -16,32 +16,32 @@ const CaseStatus = () => {
 
   const FAVORITES_KEY = '@case_status_favorites';
 
-  const SERVICES_DATA = [
-    {
-      name: "Case Number",
-      icon: "file-document-outline",
-      gradient: ["#2a8a4a", "#38f9d7"],
-      route: "CaseNumber",
-    },
-    {
-      name: "Filing Number",
-      icon: "file-document-edit-outline",
-      gradient: ["#f093fb", "#f5576c"],
-      route: "CaseFilling",
-    },
-    {
-      name: "Advocate Name",
-      icon: "file-certificate-outline",
-      gradient: ["#fa709a", "#fee140"],
-      route: "AdvocateName",
-    },
-    {
-      name: "Party Name",
-      icon: "account-group-outline",
-      gradient: ["#4facfe", "#00f2fe"],
-      route: "PartyName",
-    },
-  ];
+const SERVICES_DATA = [
+  {
+    name: "Case Number",
+    icon: "file-document-outline",
+    gradient: ["#20bf6b", "#0fb9b1"],
+    route: "CaseNumber",
+  },
+  {
+    name: "Filing Number",
+    icon: "file-document-edit-outline",
+    gradient: ["#ee5a24", "#feca57"],
+    route: "CaseFilling",
+  },
+  {
+    name: "Advocate Name",
+    icon: "file-certificate-outline",
+    gradient: ["#ff3838", "#ff6b81"],
+    route: "AdvocateName",
+  },
+  {
+    name: "Party Name",
+    icon: "account-group-outline",
+    gradient: ["#3867d6", "#8854d0"],
+    route: "PartyName",
+  },
+];
 
   useEffect(() => {
     const loadFavorites = async () => {

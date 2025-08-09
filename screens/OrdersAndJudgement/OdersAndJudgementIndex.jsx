@@ -16,38 +16,38 @@ const OdersAndJudgementIndex = () => {
 
   const FAVORITES_KEY = '@orders_and_judgement_favorites';
 
-  const SERVICES_DATA = [
-    {
-      name: "Case Number",
-      icon: "file-document-outline",
-      gradient: ["#2a8a4a", "#38f9d7"],
-      route: "OrderCaseNumber",
-    },
-    {
-      name: "Filing Number",
-      icon: "file-document-edit-outline",
-      gradient: ["#f093fb", "#f5576c"],
-      route: "OrderFillingNumber",
-    },
-    {
-      name: "Judge Wise",
-      icon: "file-certificate-outline",
-      gradient: ["#fa709a", "#fee140"],
-      route: "OrdersByJudgeName",
-    },
-    {
-      name: "Party Name",
-      icon: "account-group-outline",
-      gradient: ["#4facfe", "#00f2fe"],
-      route: "OrderByPartyName",
-    },
-    {
-      name: "Order date",
-      icon: "account-group-outline",
-      gradient: ["#ce23a0ff", "#c2acfaff"],
-      route: "OrderByOrderDate",
-    },
-  ];
+const SERVICES_DATA = [
+  {
+    name: "Case Number",
+    icon: "file-document-outline",
+    gradient: ["#20bf6b", "#0fb9b1"],
+    route: "OrderCaseNumber",
+  },
+  {
+    name: "Filing Number",
+    icon: "file-document-edit-outline",
+    gradient: ["#ee5a24", "#feca57"],
+    route: "OrderFillingNumber",
+  },
+  {
+    name: "Judge Wise",
+    icon: "file-certificate-outline",
+    gradient: ["#ff3838", "#ff6b81"],
+    route: "OrdersByJudgeName",
+  },
+  {
+    name: "Party Name",
+    icon: "account-group-outline",
+    gradient: ["#3867d6", "#8854d0"],
+    route: "OrderByPartyName",
+  },
+  {
+    name: "Order date",
+    icon: "calendar-outline",
+    gradient: ["#f8b500", "#feca57"],
+    route: "OrderByOrderDate",
+  },
+];
 
   useEffect(() => {
     const loadFavorites = async () => {

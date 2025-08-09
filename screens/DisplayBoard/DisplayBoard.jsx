@@ -16,20 +16,20 @@ const DisplayBoard = () => {
 
   const FAVORITES_KEY = '@display_board_favorites';
 
-  const SERVICES_DATA = [
-    {
-      name: "High Court Display Board",
-      icon: "monitor-dashboard",
-      gradient: ["#2a8a4a", "#38f9d7"],
-      route: "HighCourtDPBoard",
-    },
-    {
-      name: "District Court Display Board",
-      icon: "monitor-multiple",
-      gradient: ["#f093fb", "#f5576c"],
-      route: "DistrictCourtDPBoard",
-    },
-  ];
+const SERVICES_DATA = [
+  {
+    name: "High Court Display Board",
+    icon: "monitor-dashboard",
+    gradient: ["#667eea", "#764ba2"],
+    route: "HighCourtDPBoard",
+  },
+  {
+    name: "District Court Display Board",
+    icon: "monitor-multiple",
+    gradient: ["#ff6b6b", "#feca57"],
+    route: "DistrictCourtDPBoard",
+  },
+];
 
   useEffect(() => {
     const loadFavorites = async () => {
